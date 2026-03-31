@@ -1,0 +1,1347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Amoha's Maths Magic</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800;900&family=Baloo+2:wght@800;900&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --p:#1877F2;--pm:#4e9af1;--pl:#e7f0fd;--pw:#f0f4ff;--pb:#0f4fa8;
+  --w:#ffffff;--bdr:#c5d8fb;--txt:#1a1f36;--muted:#6b7fa8;
+  --green:#15803d;--red:#dc2626;--r:16px;
+}
+html,body{height:100%;font-family:'Nunito',sans-serif;background:var(--pw);color:var(--txt);overflow:hidden;}
+#app{position:fixed;inset:0;display:flex;flex-direction:column;max-width:480px;margin:0 auto;background:var(--pw);}
+#topbar{flex:0 0 52px;background:var(--p);display:flex;align-items:center;justify-content:space-between;padding:0 16px;}
+#topbar-title{font-family:'Baloo 2',sans-serif;font-size:1.05rem;font-weight:900;color:var(--w);}
+#topbar-stars{background:rgba(255,255,255,.2);border:2px solid rgba(255,255,255,.35);border-radius:99px;padding:4px 13px;font-weight:900;color:var(--w);font-size:.85rem;}
+#botnav{flex:0 0 54px;background:var(--w);border-top:2px solid var(--bdr);display:flex;}
+.bnbtn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;border:none;background:none;font-family:'Nunito',sans-serif;font-size:.6rem;font-weight:800;color:var(--muted);cursor:pointer;}
+.bnbtn .ico{font-size:1.15rem;}
+.bnbtn.on{color:var(--p);}
+#mid{flex:1;position:relative;overflow:hidden;}
+.pg{position:absolute;inset:0;display:none;flex-direction:column;overflow-y:auto;}
+.pg.on{display:flex;}
+
+/* HOME */
+#pg-home{padding:14px;gap:11px;background:var(--pw);}
+.welcome{background:var(--p);border-radius:var(--r);padding:20px;text-align:center;color:var(--w);}
+.welcome .ws{font-size:2rem;margin-bottom:4px;}
+.welcome h2{font-family:'Baloo 2',sans-serif;font-size:1.5rem;font-weight:900;margin-bottom:3px;}
+.welcome p{font-size:.83rem;opacity:.9;line-height:1.5;}
+.sec{font-size:.63rem;font-weight:900;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px;}
+.level-list{display:flex;flex-direction:column;gap:8px;}
+.lcard{background:var(--w);border:2px solid var(--bdr);border-radius:13px;padding:13px 14px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;transition:transform .1s;}
+.lcard:active{transform:scale(.97);}
+.lcard.locked{opacity:.4;cursor:default;}
+.lcard-left h4{font-family:'Baloo 2',sans-serif;font-weight:900;font-size:.9rem;color:var(--p);margin-bottom:2px;}
+.lcard-left p{font-size:.67rem;color:var(--muted);font-weight:700;}
+.lcard-icon{font-size:1.1rem;flex-shrink:0;}
+.unlock-box{background:var(--w);border:2px solid var(--bdr);border-radius:var(--r);padding:13px 14px;}
+.unlock-box h3{font-size:.8rem;font-weight:900;color:var(--p);margin-bottom:7px;}
+.urow{display:flex;gap:7px;}
+.uinput{flex:1;border:2px solid var(--bdr);border-radius:9px;padding:8px 10px;font-family:'Nunito',sans-serif;font-size:.9rem;background:var(--w);outline:none;color:var(--txt);}
+.uinput:focus{border-color:var(--p);}
+.ubtn{padding:8px 13px;border-radius:9px;border:none;background:var(--p);color:var(--w);font-family:'Nunito',sans-serif;font-weight:900;font-size:.8rem;cursor:pointer;}
+.ubtn-lock{background:var(--muted);}
+.umsg{font-size:.75rem;font-weight:800;color:var(--p);min-height:15px;margin-top:5px;}
+
+/* PRACTICE SHELL */
+#pg-prac{overflow:hidden;}
+#pshell{position:absolute;inset:0;display:flex;flex-direction:column;}
+#ptop{flex:0 0 auto;padding:5px 14px 0;display:flex;flex-direction:column;gap:4px;background:var(--pw);}
+.back-row{display:flex;align-items:center;gap:8px;}
+.backbtn{background:none;border:none;font-family:'Nunito',sans-serif;font-weight:800;font-size:.82rem;color:var(--muted);cursor:pointer;}
+#pheading{font-family:'Baloo 2',sans-serif;font-size:.88rem;font-weight:900;color:var(--p);}
+#round-label{font-size:.68rem;font-weight:800;color:var(--muted);padding:1px 0;}
+.strips{display:flex;justify-content:space-around;background:var(--w);border:2px solid var(--bdr);border-radius:11px;padding:6px 4px;}
+.si{text-align:center;}
+.sv{font-family:'Baloo 2',sans-serif;font-size:1rem;font-weight:900;line-height:1;}
+.sl{font-size:.52rem;font-weight:800;color:var(--muted);text-transform:uppercase;margin-top:1px;}
+#pbar-wrap{padding:0;}
+#pbar-lbl{display:flex;justify-content:space-between;font-size:.6rem;font-weight:800;color:var(--muted);margin-bottom:2px;}
+#pbar-track{height:6px;background:var(--pl);border-radius:99px;overflow:hidden;}
+#pbar-fill{height:100%;background:var(--p);border-radius:99px;width:0%;transition:width .3s;}
+
+/* QUESTION ZONE */
+#qzone{flex:0 0 22vmax;max-height:175px;min-height:95px;padding:5px 14px 0;display:flex;align-items:center;justify-content:center;}
+#qcard{width:100%;height:100%;background:var(--w);border:2px solid var(--bdr);border-radius:var(--r);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:10px 14px;text-align:center;}
+#qtext{font-family:'Baloo 2',sans-serif;font-size:1.8rem;font-weight:900;line-height:1.2;color:var(--txt);}
+#qhint{font-size:.66rem;color:var(--muted);margin-top:3px;}
+
+/* FEEDBACK */
+#fbzone{flex:0 0 26px;display:flex;align-items:center;justify-content:center;padding:0 14px;}
+#fbtext{font-family:'Baloo 2',sans-serif;font-size:.95rem;font-weight:900;opacity:0;transition:opacity .12s;text-align:center;}
+#fbtext.show{opacity:1;}
+#fbtext.ok{color:var(--green);}
+#fbtext.no{color:var(--red);}
+
+/* ANSWER ZONE */
+#azone{flex:1;min-height:0;padding:4px 14px 8px;display:flex;flex-direction:column;justify-content:flex-end;gap:4px;overflow:hidden;}
+#std-area{display:flex;flex-direction:column;gap:4px;flex:1;min-height:0;}
+.numpad-grid{display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(4,1fr);gap:4px;flex:1;}
+.npbtn{height:100%;min-height:36px;max-height:52px;border-radius:10px;border:2px solid var(--bdr);background:var(--w);font-family:'Baloo 2',sans-serif;font-size:1.15rem;font-weight:900;color:var(--txt);cursor:pointer;transition:background .1s,transform .08s;-webkit-tap-highlight-color:transparent;user-select:none;display:flex;align-items:center;justify-content:center;}
+.npbtn:active{background:var(--pl);transform:scale(.94);}
+.npbtn.np-del{background:var(--pl);color:var(--p);}
+.npbtn.np-go{background:var(--p);color:var(--w);box-shadow:0 4px 0 var(--pb);}
+.npbtn.np-go:active{transform:translateY(3px);box-shadow:0 1px 0 var(--pb);}
+
+/* Inline blank */
+.q-blank{display:inline-block;min-width:52px;border-bottom:4px solid var(--p);color:var(--p);padding:0 5px;margin:0 3px;font-weight:900;border-radius:4px 4px 0 0;transition:all .15s;}
+.q-blank.ok{color:var(--green);border-color:var(--green);background:#f0fdf4;}
+.q-blank.no{color:var(--red);border-color:var(--red);background:#fef2f2;}
+
+/* Division two-blank */
+#two-blank-area{display:none;flex-direction:column;gap:5px;flex-shrink:0;}
+.tba-row{display:flex;gap:8px;align-items:center;}
+.tba-lbl{font-size:.72rem;font-weight:800;color:var(--muted);flex-shrink:0;width:82px;text-align:right;}
+.tba-disp{flex:1;height:48px;border:3px solid var(--bdr);border-radius:12px;font-family:'Baloo 2',sans-serif;font-size:1.7rem;font-weight:900;text-align:center;color:var(--p);background:var(--w);display:flex;align-items:center;justify-content:center;transition:all .15s;}
+.tba-disp.active-inp{border-color:var(--p);}
+.tba-disp.ok{border-color:var(--green);background:#f0fdf4;color:var(--green);}
+.tba-disp.no{border-color:var(--red);background:#fef2f2;color:var(--red);}
+.tba-disp.empty{color:#ccc;}
+#two-go{width:100%;height:48px;border-radius:12px;border:none;background:var(--p);color:var(--w);font-family:'Baloo 2',sans-serif;font-size:1.2rem;font-weight:900;cursor:pointer;box-shadow:0 4px 0 var(--pb);transition:transform .08s,box-shadow .08s;flex-shrink:0;}
+#two-go:active{transform:translateY(3px);box-shadow:0 1px 0 var(--pb);}
+#two-np{display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(4,1fr);gap:4px;flex:1;min-height:0;}
+
+/* MC */
+#mc-area{display:none;flex-direction:column;gap:5px;flex-shrink:0;}
+.mcbtn{width:100%;height:48px;border-radius:12px;border:2px solid var(--bdr);background:var(--w);font-family:'Baloo 2',sans-serif;font-size:1rem;font-weight:900;color:var(--txt);cursor:pointer;transition:all .1s;}
+.mcbtn:active{transform:scale(.97);}
+.mcbtn.right{background:var(--pl);border-color:var(--p);color:var(--p);}
+.mcbtn.wrong{background:#fef2f2;border-color:var(--red);color:var(--red);}
+
+/* BETWEEN ROUNDS */
+#between-shell{position:absolute;inset:0;display:none;flex-direction:column;align-items:center;justify-content:center;padding:20px 16px;background:var(--pw);}
+.between-card{background:var(--w);border:2px solid var(--bdr);border-radius:18px;padding:26px 20px;text-align:center;width:100%;}
+.between-ico{font-size:2.8rem;margin-bottom:8px;}
+.between-title{font-family:'Baloo 2',sans-serif;font-size:1.4rem;font-weight:900;color:var(--p);margin-bottom:6px;}
+.between-sub{font-size:.88rem;color:var(--muted);line-height:1.5;margin-bottom:8px;}
+.between-preview{background:var(--pl);border-radius:10px;padding:10px 14px;font-size:.85rem;font-weight:800;color:var(--p);margin-bottom:16px;}
+.between-btn{width:100%;padding:14px;border-radius:13px;border:none;background:var(--p);color:var(--w);font-family:'Baloo 2',sans-serif;font-size:1.1rem;font-weight:900;cursor:pointer;}
+
+/* MINI PRACTICE (revision top-up) */
+#mini-shell{position:absolute;inset:0;display:none;flex-direction:column;align-items:center;justify-content:center;padding:20px 16px;background:#fffbeb;}
+.mini-card{background:var(--w);border:3px solid #fcd34d;border-radius:18px;padding:20px;text-align:center;width:100%;margin-bottom:14px;}
+.mini-title{font-family:'Baloo 2',sans-serif;font-size:1.2rem;font-weight:900;color:#d97706;margin-bottom:6px;}
+.mini-sub{font-size:.85rem;color:var(--muted);line-height:1.5;}
+.mini-btn{width:100%;padding:14px;border-radius:13px;border:none;background:#f59e0b;color:var(--w);font-family:'Baloo 2',sans-serif;font-size:1.1rem;font-weight:900;cursor:pointer;}
+
+/* RESULTS */
+#res-shell{position:absolute;inset:0;display:none;flex-direction:column;align-items:center;justify-content:center;padding:20px 14px;background:var(--pw);}
+.rcard{background:var(--w);border:2px solid var(--bdr);border-radius:18px;padding:24px 20px;text-align:center;width:100%;}
+.rico{font-size:2.6rem;margin-bottom:7px;}
+.rtitle{font-family:'Baloo 2',sans-serif;font-size:1.4rem;font-weight:900;color:var(--p);margin-bottom:4px;}
+.rsub{color:var(--muted);font-size:.82rem;margin-bottom:10px;line-height:1.5;}
+.rstars{font-size:1.7rem;letter-spacing:4px;margin-bottom:14px;}
+.rbtns{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;}
+.rbtn{padding:11px 18px;border-radius:11px;border:none;font-family:'Nunito',sans-serif;font-weight:900;font-size:.85rem;cursor:pointer;}
+.rbtn-p{background:var(--p);color:var(--w);}
+.rbtn-o{background:var(--w);color:var(--p);border:2px solid var(--bdr);}
+
+/* PROGRESS */
+#pg-prog{padding:14px;gap:11px;}
+.ptotal{background:var(--p);border-radius:var(--r);padding:18px;text-align:center;color:var(--w);}
+.ptnum{font-family:'Baloo 2',sans-serif;font-size:3rem;font-weight:900;line-height:1;}
+.pgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.pcrd{background:var(--w);border:2px solid var(--bdr);border-radius:13px;padding:11px;}
+.pcrd h4{font-family:'Baloo 2',sans-serif;font-weight:900;font-size:.82rem;color:var(--p);margin-bottom:3px;}
+.pstars{font-size:.88rem;margin:2px 0;}
+.pdet{font-size:.65rem;color:var(--muted);font-weight:700;}
+.attention-box{background:#fff7ed;border:2px solid #fed7aa;border-radius:var(--r);padding:14px;}
+.attention-box h3{font-size:.82rem;font-weight:900;color:#c2410c;margin-bottom:8px;}
+.attention-item{font-size:.78rem;font-weight:700;color:#9a3412;padding:4px 0;border-bottom:1px solid #fed7aa;}
+.attention-item:last-child{border-bottom:none;}
+
+/* ANIMATIONS */
+@keyframes shake{0%,100%{transform:translateX(0)}30%{transform:translateX(-7px)}70%{transform:translateX(7px)}}
+@keyframes pop{0%,100%{transform:scale(1)}50%{transform:scale(1.06)}}
+@keyframes fall{0%{transform:translateY(-20px) rotate(0deg);opacity:1}100%{transform:translateY(110vh) rotate(720deg);opacity:0}}
+.shake{animation:shake .22s ease;}
+.pop{animation:pop .22s ease;}
+#cc{position:fixed;inset:0;pointer-events:none;z-index:9999;overflow:hidden;}
+.cp{position:absolute;width:9px;height:9px;border-radius:2px;animation:fall 1.8s ease-in forwards;}
+</style>
+</head>
+<body>
+<div id="app">
+  <div id="topbar">
+    <div id="topbar-title">✨ Amoha's Maths Magic</div>
+    <div id="topbar-stars">⭐ <span id="hstars">0</span></div>
+  </div>
+
+  <div id="mid">
+
+    <!-- HOME -->
+    <div id="pg-home" class="pg on">
+      <div class="welcome">
+        <div class="ws">✨</div>
+        <h2>Maths Magic!</h2>
+        <p>Work it out on paper first.<br>Then tap your answer here!</p>
+      </div>
+      <div>
+        <div class="sec">Choose a Level</div>
+        <div class="level-list" id="level-list"></div>
+      </div>
+      <div class="unlock-box">
+        <h3>🔐 Parent — Unlock or Lock a Level</h3>
+        <div class="urow">
+          <input class="uinput" id="uinp" type="number" placeholder="Level (1–15)" min="1" max="15" inputmode="numeric">
+          <button class="ubtn" onclick="doUnlock()">Unlock</button>
+          <button class="ubtn ubtn-lock" onclick="doLock()">Lock</button>
+        </div>
+        <div class="umsg" id="umsg"></div>
+      </div>
+    </div>
+
+    <!-- PRACTICE -->
+    <div id="pg-prac" class="pg">
+
+      <!-- Main practice -->
+      <div id="pshell">
+        <div id="ptop">
+          <div class="back-row">
+            <button class="backbtn" onclick="confirmBack()">← Back</button>
+            <div id="pheading"></div>
+          </div>
+          <div id="round-label"></div>
+          <div class="strips">
+            <div class="si"><div class="sv" id="sc-c" style="color:var(--p)">0</div><div class="sl">Correct</div></div>
+            <div class="si"><div class="sv" id="sc-t">0</div><div class="sl">Tried</div></div>
+            <div class="si"><div class="sv" id="sc-need" style="color:var(--green)">8</div><div class="sl">Need</div></div>
+            <div class="si"><div class="sv" id="sc-p" style="color:var(--pm)">0%</div><div class="sl">Score</div></div>
+          </div>
+          <div id="pbar-wrap">
+            <div id="pbar-lbl"><span id="pbar-left">Round progress</span><span id="pbar-num">0 / 8</span></div>
+            <div id="pbar-track"><div id="pbar-fill"></div></div>
+          </div>
+        </div>
+        <div id="qzone">
+          <div id="qcard">
+            <div id="qtext"></div>
+            <div id="qhint"></div>
+          </div>
+        </div>
+        <div id="fbzone"><div id="fbtext"></div></div>
+        <div id="azone">
+          <div id="std-area">
+            <div class="numpad-grid" id="np-grid"></div>
+          </div>
+          <div id="two-blank-area">
+            <div class="tba-row">
+              <div class="tba-lbl">Answer:</div>
+              <div class="tba-disp empty" id="tba-q">?</div>
+            </div>
+            <div class="tba-row">
+              <div class="tba-lbl">Remainder:</div>
+              <div class="tba-disp empty" id="tba-r">?</div>
+            </div>
+            <button id="two-go" onclick="submitTwoBlank()">GO !</button>
+            <div id="two-np" class="numpad-grid"></div>
+          </div>
+          <div id="mc-area"></div>
+        </div>
+      </div>
+
+      <!-- Between rounds -->
+      <div id="between-shell">
+        <div class="between-card">
+          <div class="between-ico" id="bt-ico"></div>
+          <div class="between-title" id="bt-title"></div>
+          <div class="between-sub" id="bt-sub"></div>
+          <div class="between-preview" id="bt-preview"></div>
+          <button class="between-btn" onclick="startNextRound()">Let's go! →</button>
+        </div>
+      </div>
+
+      <!-- Mini practice (revision top-up) -->
+      <div id="mini-shell">
+        <div class="mini-card">
+          <div class="between-ico">🌟</div>
+          <div class="mini-title" id="mini-title">Let's practise this again!</div>
+          <div class="mini-sub" id="mini-sub"></div>
+        </div>
+        <div id="mini-practice-area" style="width:100%;display:flex;flex-direction:column;gap:10px;">
+          <!-- Mini practice questions shown here -->
+        </div>
+      </div>
+
+      <!-- Results -->
+      <div id="res-shell">
+        <div class="rcard">
+          <div class="rico" id="res-ico"></div>
+          <div class="rtitle" id="res-title"></div>
+          <div class="rsub" id="res-sub"></div>
+          <div class="rstars" id="res-stars"></div>
+          <div class="rbtns">
+            <button class="rbtn rbtn-p" onclick="retryLevel()">🔄 Try Again</button>
+            <button class="rbtn rbtn-o" onclick="practiseFree()">✏️ Free Practice</button>
+            <button class="rbtn rbtn-o" onclick="goHome()">🏠 Home</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PROGRESS -->
+    <div id="pg-prog" class="pg">
+      <div style="padding:14px;display:flex;flex-direction:column;gap:11px;">
+        <button class="backbtn" onclick="goHome()">← Back</button>
+        <div class="ptotal">
+          <div style="font-size:.7rem;font-weight:900;opacity:.8;margin-bottom:2px;">TOTAL STARS</div>
+          <div class="ptnum" id="ptnum">0</div>
+          <div style="font-size:1.3rem;margin-top:2px;">⭐</div>
+        </div>
+        <div id="attention-section" style="display:none;">
+          <div class="sec">Needs a Little More Practice</div>
+          <div class="attention-box">
+            <h3>📋 Parent Note</h3>
+            <div id="attention-list"></div>
+          </div>
+        </div>
+        <div class="sec">My Levels</div>
+        <div class="pgrid" id="pgrid"></div>
+        <button style="padding:8px 14px;border-radius:9px;border:2px solid var(--bdr);background:var(--w);font-family:'Nunito',sans-serif;font-weight:800;font-size:.75rem;color:var(--muted);cursor:pointer;" onclick="if(confirm('Reset all progress?'))resetAll()">🗑 Reset</button>
+      </div>
+    </div>
+
+  </div>
+
+  <div id="botnav">
+    <button class="bnbtn on" id="bn-h" onclick="goHome()"><span class="ico">🏠</span>Home</button>
+    <button class="bnbtn" id="bn-p" onclick="showProg()"><span class="ico">📊</span>Progress</button>
+  </div>
+</div>
+<div id="cc"></div>
+
+<script>
+// ═══════════════════════════════════════════════════
+// HELPERS
+// ═══════════════════════════════════════════════════
+function rnd(a,b){return a+Math.floor(Math.random()*(b-a+1));}
+function shuf(a){return[...a].sort(()=>Math.random()-.5);}
+function ss(n,m){return'⭐'.repeat(Math.min(n,m))+'☆'.repeat(Math.max(0,m-n));}
+
+// ═══════════════════════════════════════════════════
+// QUESTION GENERATORS — each returns {q, a, hint, ...}
+// ═══════════════════════════════════════════════════
+
+// --- PLACE VALUE ---
+function genPV2_tens(){
+  const n=rnd(12,99);const t=Math.floor(n/10);
+  return{q:'What is the TENS digit in '+n+'?',a:t,hint:'Tens | Units'};
+}
+function genPV2_units(){
+  const n=rnd(12,99);const u=n%10;
+  return{q:'What is the UNITS digit in '+n+'?',a:u,hint:'Tens | Units'};
+}
+function genPV2_value(){
+  const n=rnd(21,99);const t=Math.floor(n/10),u=n%10;
+  if(rnd(0,1)){return{q:'In '+n+', the digit '+t+' stands for ___',a:t*10,hint:'Tens digit × 10'};}
+  return{q:'In '+n+', the digit '+u+' stands for ___',a:u,hint:'Units digit = its own value'};
+}
+function genPV2_compare(){
+  let a=rnd(12,99),b=rnd(12,99);while(a===b)b=rnd(12,99);
+  return{q:'Which is BIGGER — '+a+' or '+b+'?',a:Math.max(a,b),hint:'Compare the tens digit first',mc:[a,b]};
+}
+function genPV2_howmany(){
+  const n=rnd(12,99);const t=Math.floor(n/10);
+  return{q:'How many TENS are in '+n+'?',a:t,hint:'Look at the tens column'};
+}
+
+function genPV3_digit(){
+  const n=rnd(102,999);const h=Math.floor(n/100),t=Math.floor((n%100)/10),u=n%10;
+  const pick=rnd(0,2);
+  if(pick===0)return{q:'HUNDREDS digit in '+n+'?',a:h,hint:'H | T | U'};
+  if(pick===1)return{q:'TENS digit in '+n+'?',a:t,hint:'H | T | U'};
+  return{q:'UNITS digit in '+n+'?',a:u,hint:'H | T | U'};
+}
+function genPV3_value(){
+  const n=rnd(102,999);const h=Math.floor(n/100),t=Math.floor((n%100)/10);
+  if(rnd(0,1))return{q:'Value of hundreds digit in '+n+'?',a:h*100,hint:'Hundreds digit × 100'};
+  return{q:'Value of tens digit in '+n+'?',a:t*10,hint:'Tens digit × 10'};
+}
+function genPV3_build(){
+  const h=rnd(1,9),t=rnd(0,9),u=rnd(0,9);
+  return{q:h+' hundreds + '+t+' tens + '+u+' units = ___',a:h*100+t*10+u,hint:'Add the values'};
+}
+function genPV3_compare(){
+  const a=rnd(102,499),b=rnd(500,799),c=rnd(102,499);
+  const mn=Math.min(a,b,c);
+  return{q:'SMALLEST of '+a+', '+b+', '+c+'?',a:mn,hint:'Compare hundreds first',mc:[a,b,c]};
+}
+function genPV3_biggest(){
+  const a=rnd(102,499),b=rnd(500,799),c=rnd(102,499);
+  const mx=Math.max(a,b,c);
+  return{q:'BIGGEST of '+a+', '+b+', '+c+'?',a:mx,hint:'Compare hundreds first',mc:[a,b,c]};
+}
+
+function genPV4_digit(){
+  const n=rnd(1002,9999);
+  const th=Math.floor(n/1000),h=Math.floor((n%1000)/100),t=Math.floor((n%100)/10),u=n%10;
+  const pick=rnd(0,3);
+  if(pick===0)return{q:'THOUSANDS digit in '+n+'?',a:th,hint:'Th|H|T|U'};
+  if(pick===1)return{q:'HUNDREDS digit in '+n+'?',a:h,hint:'Th|H|T|U'};
+  if(pick===2)return{q:'TENS digit in '+n+'?',a:t,hint:'Th|H|T|U'};
+  return{q:'UNITS digit in '+n+'?',a:u,hint:'Th|H|T|U'};
+}
+function genPV4_value(){
+  const n=rnd(1002,9999);
+  const th=Math.floor(n/1000),h=Math.floor((n%1000)/100),t=Math.floor((n%100)/10);
+  const pick=rnd(0,2);
+  if(pick===0)return{q:'Value of '+th+' in '+n+'?',a:th*1000,hint:'Thousands digit × 1000'};
+  if(pick===1)return{q:'Value of '+h+' in '+n+'?',a:h*100,hint:'Hundreds digit × 100'};
+  return{q:'Value of '+t+' in '+n+'?',a:t*10,hint:'Tens digit × 10'};
+}
+function genPV4_expanded(){
+  const n=rnd(1002,9999);
+  const th=Math.floor(n/1000),h=Math.floor((n%1000)/100),t=Math.floor((n%100)/10),u=n%10;
+  const pick=rnd(0,1);
+  if(pick===0)return{q:n+' = ___ + '+h*100+' + '+t*10+' + '+u,a:th*1000,hint:'What is the thousands part?'};
+  return{q:n+' = '+th*1000+' + ___ + '+t*10+' + '+u,a:h*100,hint:'What is the hundreds part?'};
+}
+function genPV4_more(){
+  const n=rnd(1002,8999);
+  if(rnd(0,1)){const add=rnd(1,5)*100;return{q:'What is '+add+' MORE than '+n+'?',a:n+add,hint:'Add '+add+' to '+n};}
+  const sub=rnd(1,4)*1000;
+  if(n>sub+100)return{q:'What is '+sub+' LESS than '+n+'?',a:n-sub,hint:'Subtract '+sub+' from '+n};
+  return{q:'What is 100 more than '+n+'?',a:n+100,hint:'Add 100'};
+}
+function genPV4_place(){
+  const n=rnd(1002,9999);
+  const th=Math.floor(n/1000),h=Math.floor((n%1000)/100),t=Math.floor((n%100)/10),u=n%10;
+  const opts=[['thousands',th*1000],['hundreds',h*100],['tens',t*10],['units',u]];
+  const pick=opts[rnd(0,3)];
+  return{q:'In '+n+', which digit stands for '+pick[1]+'?',
+    a:pick[0]==='thousands'?th:pick[0]==='hundreds'?h:pick[0]==='tens'?t:u,
+    hint:'Think: '+pick[0]+' column'};
+}
+
+// --- ADDITION ---
+function genAdd2_std(){
+  let a,b;do{a=rnd(15,89);b=rnd(11,84);}while(a%10+b%10<10||a+b>150);
+  return{q:a+' + '+b+' = ?',a:a+b,hint:'Add units first, carry if needed'};
+}
+function genAdd2_missing(){
+  let a,b;do{a=rnd(15,89);b=rnd(11,84);}while(a%10+b%10<10||a+b>150);
+  return{q:a+' + ___ = '+(a+b),a:b,hint:'What makes '+a+' reach '+(a+b)+'?'};
+}
+function genAdd2_word(){
+  const a=rnd(15,89),b=rnd(11,84);
+  const ns=['Riya','Ayan','Priya','Arjun'];const n=ns[rnd(0,3)];
+  const things=['stickers','marbles','stamps','flowers'];const th=things[rnd(0,3)];
+  return{q:n+' has '+a+' '+th+' and gets '+b+' more. How many now?',a:a+b,hint:'Add them',isWord:true};
+}
+function genAdd2_mc(){
+  let a,b;do{a=rnd(15,89);b=rnd(11,84);}while(a%10+b%10<10||a+b>150);
+  const c=a+b;const opts=shuf([c,c+10,c-10,c+1]).filter(v=>v>0).slice(0,4);
+  return{q:a+' + '+b+' = ?',a:c,hint:'Work it out on paper',mc:opts};
+}
+
+function genAdd3_std(){
+  const a=rnd(105,699),b=rnd(101,699);
+  return{q:a+' + '+b+' = ?',a:a+b,hint:'Units → Tens → Hundreds'};
+}
+function genAdd3_missing(){
+  const a=rnd(105,699),b=rnd(101,499);
+  return{q:a+' + ___ = '+(a+b),a:b,hint:'What adds to '+a+' to make '+(a+b)+'?'};
+}
+function genAdd3_twostep(){
+  const a=rnd(105,399),b=rnd(101,399),c=rnd(10,99);
+  return{q:a+' + '+b+' + '+c+' = ?',a:a+b+c,hint:'Add first two, then add '+c};
+}
+function genAdd3_word(){
+  const a=rnd(105,499),b=rnd(101,499);
+  const things=['books','students','flowers','stamps'];const th=things[rnd(0,3)];
+  return{q:'School A has '+a+' '+th+'. School B has '+b+'. Total?',a:a+b,hint:'Add carefully',isWord:true};
+}
+
+function genAdd4_std(){
+  const a=rnd(1005,5999),b=rnd(1001,5999);
+  return{q:a+' + '+b+' = ?',a:a+b,hint:'Th|H|T|U on paper'};
+}
+function genAdd4_missing(){
+  const a=rnd(1005,5999),b=rnd(1001,3999);
+  return{q:a+' + ___ = '+(a+b),a:b,hint:'What added to '+a+' gives '+(a+b)+'?'};
+}
+function genAdd4_mc(){
+  const a=rnd(1005,4999),b=rnd(1001,4999);const c=a+b;
+  const opts=shuf([c,c+100,c-100,c+10]).filter(v=>v>0).slice(0,4);
+  return{q:a+' + '+b+' = ?',a:c,hint:'Work on paper',mc:opts};
+}
+function genAdd4_word(){
+  const a=rnd(1005,4999),b=rnd(1001,4999);
+  return{q:'A town has '+a+' men and '+b+' women. Total population?',a:a+b,hint:'Add carefully',isWord:true};
+}
+
+// --- SUBTRACTION ---
+function genSub2_std(){
+  let a,b;do{a=rnd(21,99);b=rnd(11,a-10);}while(a%10>=b%10||a-b<5);
+  return{q:a+' − '+b+' = ?',a:a-b,hint:'Borrow from tens if needed'};
+}
+function genSub2_missing(){
+  let a,b;do{a=rnd(21,99);b=rnd(11,a-10);}while(a%10>=b%10||a-b<5);
+  return{q:a+' − ___ = '+(a-b),a:b,hint:'What do you subtract from '+a+' to get '+(a-b)+'?'};
+}
+function genSub2_more(){
+  const big=rnd(50,90),small=rnd(20,big-10);
+  return{q:'How much MORE is '+big+' than '+small+'?',a:big-small,hint:'Subtract to find difference'};
+}
+function genSub2_word(){
+  let a,b;do{a=rnd(21,99);b=rnd(11,a-10);}while(a%10>=b%10||a-b<5);
+  const ns=['Riya','Ayan','Priya','Arjun'];const n=ns[rnd(0,3)];
+  return{q:n+' had ₹'+a+' and spent ₹'+b+'. How much left?',a:a-b,hint:'Subtract',isWord:true};
+}
+
+function genSub3_std(){
+  let a,b;do{a=rnd(201,999);b=rnd(101,a-50);}while(a-b<50);
+  return{q:a+' − '+b+' = ?',a:a-b,hint:'Work column by column'};
+}
+function genSub3_missing(){
+  let a,b;do{a=rnd(201,999);b=rnd(101,a-50);}while(a-b<50);
+  return{q:a+' − ___ = '+(a-b),a:b,hint:'What gives '+(a-b)+' when subtracted from '+a+'?'};
+}
+function genSub3_diff(){
+  let a,b;do{a=rnd(201,999);b=rnd(101,a-50);}while(a-b<50);
+  return{q:'DIFFERENCE between '+a+' and '+b+'?',a:a-b,hint:'Subtract smaller from bigger'};
+}
+function genSub3_word(){
+  const a=rnd(300,999),b=rnd(50,200);
+  return{q:'A school has '+a+' books. '+b+' are taken out. How many remain?',a:a-b,hint:'Subtract',isWord:true};
+}
+
+function genSub4_std(){
+  let a,b;do{a=rnd(2001,9999);b=rnd(1001,a-500);}while(a-b<500);
+  return{q:a+' − '+b+' = ?',a:a-b,hint:'Take your time on paper'};
+}
+function genSub4_missing(){
+  let a,b;do{a=rnd(2001,9999);b=rnd(1001,a-500);}while(a-b<500);
+  return{q:a+' − ___ = '+(a-b),a:b,hint:'What is subtracted from '+a+' to get '+(a-b)+'?'};
+}
+function genSub4_mc(){
+  let a,b;do{a=rnd(2001,9999);b=rnd(1001,a-500);}while(a-b<500);
+  const c=a-b;const opts=shuf([c,c+100,c-100,c+10]).filter(v=>v>0).slice(0,4);
+  return{q:a+' − '+b+' = ?',a:c,hint:'Work on paper',mc:opts};
+}
+function genSub4_word(){
+  const a=rnd(2001,9999),b=rnd(500,2000);
+  if(a>b)return{q:'A factory made '+a+' items. '+b+' were sold. How many left?',a:a-b,hint:'Subtract',isWord:true};
+  return{q:(a+b)+' − '+b+' = ?',a:a,hint:'Work on paper'};
+}
+
+// --- DIVISION ---
+function genDiv_std(){
+  const d=rnd(2,9),q=rnd(2,12);
+  return{q:(d*q)+' ÷ '+d+' = ?',a:q,hint:'What × '+d+' = '+(d*q)+'?'};
+}
+function genDiv_reverse(){
+  const d=rnd(2,9),q=rnd(2,12);
+  return{q:'___ ÷ '+d+' = '+q,a:d*q,hint:'Work backwards: '+q+' × '+d+' = ?'};
+}
+function genDiv_mc(){
+  const d=rnd(2,9),q=rnd(2,12);const n=d*q;
+  const opts=shuf([q,q+1,q-1,q+2]).filter(v=>v>0).slice(0,4);
+  return{q:n+' ÷ '+d+' = ?',a:q,hint:'Which divides exactly?',mc:opts};
+}
+function genDiv_word(){
+  const d=rnd(2,9),q=rnd(2,12);const n=d*q;
+  const things=['sweets','apples','pencils','stickers'];const th=things[rnd(0,3)];
+  return{q:''+n+' '+th+' shared equally among '+d+' children. How many each?',a:q,hint:'Divide',isWord:true};
+}
+
+function genDivR_both(){
+  const d=rnd(2,9),q=rnd(2,10),r=rnd(1,d-1);
+  return{q:(d*q+r)+' ÷ '+d+' = ? remainder ?',a:q,r:r,isDiv:true,hint:'How many times? What is left?'};
+}
+function genDivR_rem(){
+  const d=rnd(2,9),q=rnd(2,10),r=rnd(1,d-1);
+  return{q:'Remainder when '+(d*q+r)+' ÷ '+d+'?',a:r,hint:'Find how many '+d+'s fit, then what is left'};
+}
+function genDivR_biggest(){
+  const d=rnd(2,9),q=rnd(3,10);
+  return{q:'Biggest multiple of '+d+' that is ≤ '+(d*q+rnd(1,d-1))+'?',a:d*q,hint:''+d+' × '+q+' = ?'};
+}
+function genDivR_word(){
+  const d=rnd(2,9),q=rnd(2,8),r=rnd(1,d-1);
+  const things=['oranges','biscuits','marbles'];const th=things[rnd(0,2)];
+  return{q:''+(d*q+r)+' '+th+' shared among '+d+' children. How many each and left over?',
+    a:q,r:r,isDiv:true,hint:'Divide then find remainder',isWord:true};
+}
+
+// --- GRAMS & KG ---
+function genGK_kgtog(){
+  const kg=rnd(1,9);return{q:kg+' kg = ___ g',a:kg*1000,hint:'Multiply by 1000'};
+}
+function genGK_gtok(){
+  const g=rnd(1,9)*1000;return{q:g+' g = ___ kg',a:g/1000,hint:'Divide by 1000'};
+}
+function genGK_mixed(){
+  const kg=rnd(1,5),g=rnd(1,9)*100;
+  return{q:kg+' kg '+g+' g = ___ g',a:kg*1000+g,hint:'Convert kg then add'};
+}
+function genGK_heavier(){
+  const a=rnd(1,4)*1000+rnd(1,9)*100,b=rnd(1,4)*1000+rnd(1,9)*100;
+  if(a===b)return genGK_heavier();
+  return{q:'Which is HEAVIER — '+a+' g or '+b+' g?',a:Math.max(a,b),hint:'Compare',mc:[a,b]};
+}
+function genGK_addsub(){
+  const kg=rnd(1,3),g=rnd(100,800),add=rnd(100,500);
+  if(rnd(0,1))return{q:kg+' kg '+g+' g + '+add+' g = ___ g',a:kg*1000+g+add,hint:'Convert to g then add'};
+  const tot=kg*1000+g;const use=rnd(100,Math.min(tot-100,800));
+  return{q:'Have '+tot+' g. Use '+use+' g. How much left?',a:tot-use,hint:'Subtract in grams'};
+}
+
+// --- MASS WORD PROBLEMS ---
+function genMWP(){
+  const type=rnd(0,7);
+  if(type===0){const a=rnd(2,5),b=rnd(200,800);return{q:'Mama bought '+a+' kg '+b+' g of rice. Total in grams?',a:a*1000+b,hint:'Convert then add',isWord:true};}
+  if(type===1){const t=rnd(3,8)*1000,u=rnd(200,700);return{q:'Bag weighs '+t+' g. Uses '+u+' g. How much left?',a:t-u,hint:'Subtract',isWord:true};}
+  if(type===2){const p=rnd(2,5),w=rnd(200,500);return{q:''+p+' packets × '+w+' g each. Total weight?',a:p*w,hint:'Multiply',isWord:true};}
+  if(type===3){const tot=rnd(2,4)*1000,p=rnd(2,4);return{q:''+tot+' g divided equally into '+p+' bags. Each bag?',a:tot/p,hint:'Divide',isWord:true};}
+  if(type===4){const a=rnd(1,3)*1000+rnd(1,9)*100,b=rnd(1,3)*1000+rnd(1,9)*100;return{q:'Box A: '+a+' g. Box B: '+b+' g. Total?',a:a+b,hint:'Add',isWord:true};}
+  if(type===5){const buy=rnd(3,7)*1000,use=rnd(500,1500);return{q:'Bought '+buy+' g sugar. Used '+use+' g. Left?',a:buy-use,hint:'Subtract',isWord:true};}
+  if(type===6){const w=rnd(2,5);return{q:'Each apple: '+w*100+' g. 10 apples. Total?',a:w*100*10,hint:'Multiply by 10',isWord:true};}
+  const a=rnd(1,3)*1000,b=rnd(1,3)*1000;return{q:'Bag 1: '+a+' g. Bag 2: '+b+' g. Which heavier? (1 or 2)',a:a>b?1:2,hint:'Compare',isWord:true};
+}
+
+// --- MIXED WORD PROBLEMS ---
+function genMixed(){
+  const type=rnd(0,9);
+  if(type===0){const a=rnd(125,499),b=rnd(101,499);return{q:'School: '+a+' girls and '+b+' boys. Total?',a:a+b,isWord:true};}
+  if(type===1){let a=rnd(201,800),b=rnd(50,200);return{q:''+a+' books. '+b+' taken out. Remaining?',a:a-b,isWord:true};}
+  if(type===2){const p=rnd(3,7),c=rnd(15,40);return{q:''+p+' children × '+c+' stamps each. Total?',a:p*c,isWord:true};}
+  if(type===3){const d=rnd(2,8),q=rnd(3,10);return{q:''+(d*q)+' sweets shared among '+d+'. Each gets?',a:q,isWord:true};}
+  if(type===4){const a=rnd(200,500),b=rnd(50,150);return{q:'Flour: '+a+' g. Sugar: '+b+' g. Total?',a:a+b,isWord:true};}
+  if(type===5){const w=rnd(1500,4000),u=rnd(200,800);return{q:'Had '+w+' g rice. Cooked '+u+' g. Left?',a:w-u,isWord:true};}
+  if(type===6){const a=rnd(1005,3999),b=rnd(1001,3999);return{q:'School A: '+a+'. School B: '+b+'. Total students?',a:a+b,isWord:true};}
+  if(type===7){const p=rnd(2,5),w=rnd(300,700);return{q:''+p+' watermelons × '+w+' g. Total?',a:p*w,isWord:true};}
+  if(type===8){const tot=rnd(2000,6000),t=rnd(500,1500);return{q:'Tank: '+tot+' L. Used '+t+' L. Remains?',a:tot-t,isWord:true};}
+  const a=rnd(1005,3999),b=rnd(1001,3999);return{q:'Town A: '+a+' people. Town B: '+b+'. Total?',a:a+b,isWord:true};
+}
+
+// --- GRAND CHALLENGE ---
+function genGrand(){
+  const which=rnd(0,6);
+  if(which===0){const n=rnd(1002,9999);const th=Math.floor(n/1000),h=Math.floor((n%1000)/100),t=Math.floor((n%100)/10),u=n%10;return{q:n+' = ___ + '+h*100+' + '+t*10+' + '+u,a:th*1000,hint:'Thousands part?'};}
+  if(which===1){const a=rnd(1005,4999),b=rnd(1001,4999),c=rnd(100,500);return{q:a+' + '+b+' + '+c+' = ?',a:a+b+c,hint:'Add step by step'};}
+  if(which===2){let a,b;do{a=rnd(5001,9999);b=rnd(2001,a-500);}while(a-b<500);return{q:a+' − '+b+' = ?',a:a-b,hint:'Work on paper'};}
+  if(which===3){const d=rnd(3,9),q=rnd(5,12),r=rnd(1,d-1);return{q:(d*q+r)+' ÷ '+d+' = ? rem ?',a:q,r:r,isDiv:true,hint:'Quotient and remainder'};}
+  if(which===4){const a=rnd(2,4)*1000,b=rnd(200,600),c=rnd(100,400);return{q:'Bag: '+(a+b)+' g. Remove '+c+' g. Left?',a:a+b-c,hint:'Subtract',isWord:true};}
+  if(which===5){const a=rnd(2001,6999),tot=a+rnd(1001,3999);return{q:a+' + ___ = '+tot,a:tot-a,hint:'What makes '+a+' reach '+tot+'?'};}
+  const p=rnd(3,6),w=rnd(200,500),extra=rnd(100,300);
+  return{q:''+p+' boxes × '+w+' g each. Add '+extra+' g. Total?',a:p*w+extra,hint:'Multiply then add',isWord:true};
+}
+
+// ═══════════════════════════════════════════════════
+// LEVELS — each has rounds, each round has a generator
+// ═══════════════════════════════════════════════════
+const LEVELS = [
+  {name:'Place Value — 2 Digits',
+   rounds:[
+     {name:'Tens Digits',preview:'What is the TENS digit in 47?',gen:genPV2_tens},
+     {name:'Units Digits',preview:'What is the UNITS digit in 63?',gen:genPV2_units},
+     {name:'Digit Values',preview:'In 47, the digit 4 stands for ___',gen:genPV2_value},
+     {name:'Comparing Numbers',preview:'Which is bigger — 47 or 74?',gen:genPV2_compare},
+     {name:'How Many Tens',preview:'How many tens are in 63?',gen:genPV2_howmany},
+   ]},
+  {name:'Place Value — 3 Digits',
+   rounds:[
+     {name:'Finding Digits',preview:'HUNDREDS digit in 352?',gen:genPV3_digit},
+     {name:'Digit Values',preview:'Value of hundreds digit in 352?',gen:genPV3_value},
+     {name:'Build the Number',preview:'3 hundreds + 5 tens + 2 units = ___',gen:genPV3_build},
+     {name:'Smallest Number',preview:'Smallest of 342, 234, 423?',gen:genPV3_compare},
+     {name:'Biggest Number',preview:'Biggest of 342, 234, 423?',gen:genPV3_biggest},
+   ]},
+  {name:'Place Value — 4 Digits',
+   rounds:[
+     {name:'Finding Digits',preview:'THOUSANDS digit in 4738?',gen:genPV4_digit},
+     {name:'Digit Values',preview:'Value of 4 in 4738?',gen:genPV4_value},
+     {name:'Expanded Form',preview:'4738 = ___ + 700 + 30 + 8',gen:genPV4_expanded},
+     {name:'More and Less',preview:'What is 100 more than 3456?',gen:genPV4_more},
+     {name:'Which Place?',preview:'In 4738, which digit stands for 700?',gen:genPV4_place},
+   ]},
+  {name:'2-Digit Addition',
+   rounds:[
+     {name:'Standard Sums',preview:'47 + 35 = ?',gen:genAdd2_std},
+     {name:'Missing Numbers',preview:'47 + ___ = 82',gen:genAdd2_missing},
+     {name:'Word Problems',preview:'Riya has 47 stickers and gets 35 more.',gen:genAdd2_word},
+     {name:'Multiple Choice',preview:'What does 47 + 35 equal?',gen:genAdd2_mc},
+   ]},
+  {name:'3-Digit Addition',
+   rounds:[
+     {name:'Standard Sums',preview:'234 + 158 = ?',gen:genAdd3_std},
+     {name:'Missing Numbers',preview:'234 + ___ = 512',gen:genAdd3_missing},
+     {name:'Two-Step Sums',preview:'234 + 158 + 47 = ?',gen:genAdd3_twostep},
+     {name:'Word Problems',preview:'School A has 234. School B has 158.',gen:genAdd3_word},
+   ]},
+  {name:'4-Digit Addition',
+   rounds:[
+     {name:'Standard Sums',preview:'2346 + 1589 = ?',gen:genAdd4_std},
+     {name:'Missing Numbers',preview:'2346 + ___ = 5891',gen:genAdd4_missing},
+     {name:'Multiple Choice',preview:'Which answer is correct?',gen:genAdd4_mc},
+     {name:'Word Problems',preview:'Town A: 2346. Town B: 1589.',gen:genAdd4_word},
+   ]},
+  {name:'2-Digit Subtraction',
+   rounds:[
+     {name:'Standard Sums',preview:'63 − 28 = ?',gen:genSub2_std},
+     {name:'Missing Numbers',preview:'63 − ___ = 35',gen:genSub2_missing},
+     {name:'How Much More?',preview:'How much more is 81 than 47?',gen:genSub2_more},
+     {name:'Word Problems',preview:'Riya had ₹63 and spent ₹28.',gen:genSub2_word},
+   ]},
+  {name:'3-Digit Subtraction',
+   rounds:[
+     {name:'Standard Sums',preview:'412 − 167 = ?',gen:genSub3_std},
+     {name:'Missing Numbers',preview:'412 − ___ = 245',gen:genSub3_missing},
+     {name:'Find the Difference',preview:'Difference between 412 and 167?',gen:genSub3_diff},
+     {name:'Word Problems',preview:'School has 412 books. 167 taken out.',gen:genSub3_word},
+   ]},
+  {name:'4-Digit Subtraction',
+   rounds:[
+     {name:'Standard Sums',preview:'5832 − 2467 = ?',gen:genSub4_std},
+     {name:'Missing Numbers',preview:'5832 − ___ = 3365',gen:genSub4_missing},
+     {name:'Multiple Choice',preview:'Which answer is correct?',gen:genSub4_mc},
+     {name:'Word Problems',preview:'Factory made 5832. Sold 2467.',gen:genSub4_word},
+   ]},
+  {name:'Division — No Remainder',
+   rounds:[
+     {name:'Standard Division',preview:'48 ÷ 6 = ?',gen:genDiv_std},
+     {name:'Find the Number',preview:'___ ÷ 6 = 8',gen:genDiv_reverse},
+     {name:'Multiple Choice',preview:'Which answer is correct?',gen:genDiv_mc},
+     {name:'Word Problems',preview:'48 sweets shared among 6 children.',gen:genDiv_word},
+   ]},
+  {name:'Division — With Remainder',
+   rounds:[
+     {name:'Quotient and Remainder',preview:'25 ÷ 4 = ? remainder ?',gen:genDivR_both},
+     {name:'Just the Remainder',preview:'Remainder when 25 ÷ 4?',gen:genDivR_rem},
+     {name:'Biggest Multiple',preview:'Biggest multiple of 4 ≤ 25?',gen:genDivR_biggest},
+     {name:'Word Problems',preview:'25 oranges shared among 4 children.',gen:genDivR_word},
+   ]},
+  {name:'Grams and Kilograms',
+   rounds:[
+     {name:'kg to grams',preview:'3 kg = ___ g',gen:genGK_kgtog},
+     {name:'g to kg',preview:'3000 g = ___ kg',gen:genGK_gtok},
+     {name:'Mixed Units',preview:'2 kg 500 g = ___ g',gen:genGK_mixed},
+     {name:'Which is Heavier?',preview:'Which is heavier — 2500 g or 3 kg?',gen:genGK_heavier},
+     {name:'Add and Subtract',preview:'1 kg 300 g + 400 g = ___ g',gen:genGK_addsub},
+   ]},
+  {name:'Mass Word Problems',
+   rounds:[
+     {name:'Round 1',preview:'Mama bought 2 kg 500 g of rice.',gen:genMWP},
+     {name:'Round 2',preview:'Bag weighs 3000 g. Uses 400 g.',gen:genMWP},
+     {name:'Round 3',preview:'3 packets × 200 g each.',gen:genMWP},
+     {name:'Round 4',preview:'2000 g divided into 4 bags.',gen:genMWP},
+   ]},
+  {name:'Mixed Word Problems',
+   rounds:[
+     {name:'Addition Problems',preview:'School has 234 girls and 189 boys.',gen:genMixed},
+     {name:'Subtraction Problems',preview:'300 books. 50 taken out.',gen:genMixed},
+     {name:'Multiplication Problems',preview:'5 children × 15 stamps each.',gen:genMixed},
+     {name:'Division Problems',preview:'48 sweets shared among 6.',gen:genMixed},
+     {name:'All Mixed',preview:'Any type — think before you write!',gen:genMixed},
+   ]},
+  {name:'Grand Challenge ✨',
+   rounds:[
+     {name:'Challenge Round 1',preview:'Everything mixed — hardest numbers!',gen:genGrand},
+     {name:'Challenge Round 2',preview:'Work carefully on paper!',gen:genGrand},
+     {name:'Challenge Round 3',preview:'You can do this!',gen:genGrand},
+     {name:'Final Challenge',preview:'Give it your best!',gen:genGrand},
+   ]},
+];
+
+// ═══════════════════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════════════════
+let S=loadS();
+function loadS(){
+  try{const d=JSON.parse(localStorage.getItem('amm1'));if(d)return d;}catch(e){}
+  return{unlocked:{0:true},passed:{},roundsPassed:{},stars:0,best:{},attention:{},weakCounts:{}};
+}
+function saveS(){localStorage.setItem('amm1',JSON.stringify(S));}
+
+// ═══════════════════════════════════════════════════
+// SESSION
+// ═══════════════════════════════════════════════════
+let ses={
+  level:0,round:0,
+  correct:0,tried:0,attemptsOnQ:0,
+  cq:null,
+  isFree:false,
+  isMini:false,miniLevel:null,
+  revisionQ5:0,  // counter — every 5th question is revision
+  weakRevision:{}, // levelIdx -> wrong count this session
+  pendingMini:null, // levelIdx to do mini practice
+};
+let pracVal={v:''}, twoQVal={v:''}, twoRVal={v:''}, twoActive='q';
+
+// ═══════════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════════
+function init(){buildLevelList();updHdr();}
+function updHdr(){document.getElementById('hstars').textContent=S.stars;}
+
+function levelUnlocked(idx){
+  if(idx===0)return true;
+  if(S.unlocked&&S.unlocked[idx])return true;
+  return !!(S.passed&&S.passed[idx-1]);
+}
+
+function buildLevelList(){
+  const g=document.getElementById('level-list');g.innerHTML='';
+  LEVELS.forEach((lv,idx)=>{
+    const u=levelUnlocked(idx);
+    const passed=!!(S.passed&&S.passed[idx]);
+    const icon=passed?'⭐':(u?'▶':'🔒');
+    const card=document.createElement('div');
+    card.className='lcard'+(u?'':' locked');
+    const left=document.createElement('div');left.className='lcard-left';
+    const h=document.createElement('h4');h.textContent=(u?'':'🔒 ')+'Level '+(idx+1)+' — '+lv.name;
+    const rcount=lv.rounds.length;
+    const rpassed=Object.keys(S.roundsPassed||{}).filter(k=>k.startsWith(idx+'-')).length;
+    const p=document.createElement('p');p.textContent=rcount+' rounds · '+rpassed+'/'+rcount+' completed';
+    left.appendChild(h);left.appendChild(p);
+    const ico=document.createElement('div');ico.className='lcard-icon';ico.textContent=icon;
+    card.appendChild(left);card.appendChild(ico);
+    if(u)card.onclick=()=>startLevel(idx);
+    g.appendChild(card);
+  });
+}
+
+// ═══════════════════════════════════════════════════
+// NAVIGATION
+// ═══════════════════════════════════════════════════
+function showPg(id){
+  document.querySelectorAll('.pg').forEach(p=>p.classList.remove('on'));
+  document.getElementById(id).classList.add('on');
+  ['bn-h','bn-p'].forEach(b=>document.getElementById(b).classList.remove('on'));
+  if(id==='pg-home')document.getElementById('bn-h').classList.add('on');
+  if(id==='pg-prog')document.getElementById('bn-p').classList.add('on');
+}
+function goHome(){showPg('pg-home');buildLevelList();updHdr();}
+function confirmBack(){if(confirm('Leave this round?'))goHome();}
+
+function showProg(){
+  showPg('pg-prog');
+  document.getElementById('ptnum').textContent=S.stars;
+  // Attention section
+  const attn=S.attention||{};
+  const attnKeys=Object.keys(attn).filter(k=>attn[k]&&attn[k].length>0);
+  if(attnKeys.length>0){
+    document.getElementById('attention-section').style.display='block';
+    const list=document.getElementById('attention-list');list.innerHTML='';
+    attnKeys.forEach(k=>{
+      const lvIdx=parseInt(k);
+      const lvName=LEVELS[lvIdx]?LEVELS[lvIdx].name:'Level '+(lvIdx+1);
+      const count=attn[k].length;
+      const d=document.createElement('div');d.className='attention-item';
+      d.textContent='📌 '+lvName+' — Amoha got '+count+' revision question'+(count>1?'s':'')+' wrong. Worth revisiting.';
+      list.appendChild(d);
+    });
+  } else {
+    document.getElementById('attention-section').style.display='none';
+  }
+  // Level grid
+  const g=document.getElementById('pgrid');g.innerHTML='';
+  LEVELS.forEach((lv,idx)=>{
+    const d=document.createElement('div');d.className='pcrd';
+    const passed=!!(S.passed&&S.passed[idx]);
+    const best=S.best&&S.best[idx]?S.best[idx]:0;
+    const rcount=lv.rounds.length;
+    const rpassed=Object.keys(S.roundsPassed||{}).filter(k=>k.startsWith(idx+'-')).length;
+    d.innerHTML='<h4>Level '+(idx+1)+'</h4>'
+      +'<div class="pstars">'+ss(passed?3:rpassed>0?1:0,3)+'</div>'
+      +'<div class="pdet">'+lv.name.split('—')[0].trim()+'</div>'
+      +'<div class="pdet">Rounds: '+rpassed+'/'+rcount+'</div>'
+      +(levelUnlocked(idx)?'':'<div class="pdet">🔒 Locked</div>');
+    g.appendChild(d);
+  });
+  document.getElementById('bn-p').classList.add('on');
+}
+
+// ═══════════════════════════════════════════════════
+// START LEVEL / ROUND
+// ═══════════════════════════════════════════════════
+function startLevel(idx){
+  ses.level=idx;ses.round=0;ses.isFree=false;
+  ses.weakRevision={};ses.revisionQ5=0;ses.pendingMini=null;
+  showPg('pg-prac');
+  showPshell();
+  beginRound();
+}
+
+function practiseFree(){
+  ses.isFree=true;
+  ses.round=0;
+  showPg('pg-prac');
+  showPshell();
+  beginRound();
+}
+
+function beginRound(){
+  ses.correct=0;ses.tried=0;ses.attemptsOnQ=0;ses.revisionQ5=0;
+  const lv=LEVELS[ses.level];
+  const rd=lv.rounds[ses.round];
+  document.getElementById('pheading').textContent='Level '+(ses.level+1)+' — '+lv.name;
+  document.getElementById('round-label').textContent=
+    'Round '+(ses.round+1)+' of '+lv.rounds.length+': '+rd.name+(ses.isFree?' (Free Practice)':'');
+  updScores();
+  nextQ();
+}
+
+function nextRound(){
+  ses.round++;
+  if(ses.round>=LEVELS[ses.level].rounds.length){
+    // All rounds done
+    showLevelResults();
+  } else {
+    showBetween();
+  }
+}
+
+function startNextRound(){
+  showPshell();
+  beginRound();
+}
+
+// ═══════════════════════════════════════════════════
+// BETWEEN ROUNDS SCREEN
+// ═══════════════════════════════════════════════════
+function showBetween(){
+  document.getElementById('pshell').style.display='none';
+  document.getElementById('between-shell').style.display='flex';
+  document.getElementById('between-shell').style.flexDirection='column';
+  document.getElementById('res-shell').style.display='none';
+  document.getElementById('mini-shell').style.display='none';
+
+  const lv=LEVELS[ses.level];
+  const nextRd=lv.rounds[ses.round];
+  document.getElementById('bt-ico').textContent='⭐';
+  document.getElementById('bt-title').textContent='Round '+(ses.round)+' done!';
+  document.getElementById('bt-sub').textContent='Great work! Next up: '+nextRd.name;
+  document.getElementById('bt-preview').textContent='Example: '+nextRd.preview;
+}
+
+// ═══════════════════════════════════════════════════
+// MINI PRACTICE (revision top-up)
+// ═══════════════════════════════════════════════════
+function triggerMiniPractice(lvIdx){
+  ses.pendingMini=lvIdx;
+  document.getElementById('pshell').style.display='none';
+  document.getElementById('between-shell').style.display='none';
+  document.getElementById('mini-shell').style.display='flex';
+  document.getElementById('mini-shell').style.flexDirection='column';
+  const lvName=LEVELS[lvIdx].name;
+  document.getElementById('mini-title').textContent='Let\'s practise '+lvName+' again! 🌟';
+  document.getElementById('mini-sub').textContent=
+    'You got a few of these wrong. 5 quick questions — no pressure!';
+  // Run 5 questions from that level's first round inline
+  runMiniPractice(lvIdx);
+}
+
+function runMiniPractice(lvIdx){
+  const area=document.getElementById('mini-practice-area');
+  area.innerHTML='';
+  let count=0,correct=0;
+  const rd=LEVELS[lvIdx].rounds[0];
+
+  function doNext(){
+    if(count>=5){
+      // Done — continue
+      area.innerHTML='<div style="text-align:center;font-family:\'Baloo 2\',sans-serif;font-size:1.1rem;font-weight:900;color:var(--green);padding:16px;">'+correct+'/5 correct! Well done! 🌟</div>';
+      const btn=document.createElement('button');
+      btn.className='mini-btn';btn.textContent='Continue →';
+      btn.onclick=()=>{
+        document.getElementById('mini-shell').style.display='none';
+        ses.pendingMini=null;
+        // Continue where we were
+        if(ses.round<LEVELS[ses.level].rounds.length){showBetween();}
+        else{showLevelResults();}
+      };
+      area.appendChild(btn);
+      return;
+    }
+    const q=rd.gen();
+    const card=document.createElement('div');
+    card.style.cssText='background:var(--w);border:2px solid var(--bdr);border-radius:13px;padding:14px;text-align:center;';
+    const qtext=document.createElement('div');
+    qtext.style.cssText='font-family:\'Baloo 2\',sans-serif;font-size:1.3rem;font-weight:900;margin-bottom:10px;';
+    qtext.textContent=(count+1)+'. '+q.q;
+    const inp=document.createElement('input');
+    inp.type='number';inp.inputMode='numeric';inp.autocomplete='off';
+    inp.style.cssText='width:100%;height:44px;border:2px solid var(--bdr);border-radius:10px;font-family:\'Baloo 2\',sans-serif;font-size:1.4rem;font-weight:900;text-align:center;outline:none;';
+    inp.placeholder='?';
+    const fb=document.createElement('div');
+    fb.style.cssText='font-size:.8rem;font-weight:800;min-height:18px;margin-top:6px;';
+    const btn=document.createElement('button');
+    btn.style.cssText='width:100%;height:40px;border-radius:10px;border:none;background:var(--p);color:var(--w);font-family:\'Baloo 2\',sans-serif;font-size:1rem;font-weight:900;cursor:pointer;margin-top:6px;';
+    btn.textContent='Check';
+    btn.onclick=()=>{
+      const v=parseInt(inp.value);
+      if(isNaN(v))return;
+      btn.disabled=true;
+      if(v===q.a){correct++;fb.textContent='✓ Correct!';fb.style.color='var(--green)';inp.style.borderColor='var(--green)';}
+      else{fb.textContent='Answer: '+q.a;fb.style.color='var(--red)';inp.style.borderColor='var(--red)';}
+      count++;setTimeout(doNext,900);
+    };
+    inp.onkeydown=e=>{if(e.key==='Enter')btn.click();};
+    card.appendChild(qtext);card.appendChild(inp);card.appendChild(fb);card.appendChild(btn);
+    area.innerHTML='';area.appendChild(card);
+  }
+  doNext();
+}
+
+// ═══════════════════════════════════════════════════
+// QUESTION ENGINE
+// ═══════════════════════════════════════════════════
+function getQ(){
+  // Every 5th question — pull from a passed level (revision)
+  ses.revisionQ5++;
+  if(ses.revisionQ5>=5&&!ses.isFree){
+    ses.revisionQ5=0;
+    const passedLevels=Object.keys(S.passed||{}).map(Number).filter(i=>i!==ses.level&&LEVELS[i]);
+    if(passedLevels.length>0){
+      const lvIdx=passedLevels[Math.floor(Math.random()*passedLevels.length)];
+      const rd=LEVELS[lvIdx].rounds[0];
+      const q=rd.gen();
+      q._revisionLevel=lvIdx;
+      return q;
+    }
+  }
+  return LEVELS[ses.level].rounds[ses.round].gen();
+}
+
+function nextQ(){
+  const q=getQ();
+  ses.cq=q;ses.attemptsOnQ=0;
+  renderQ(q);
+  clrFb();
+  hideAllA();
+  if(q.isDiv){
+    twoQVal.v='';twoRVal.v='';twoActive='q';
+    document.getElementById('tba-q').textContent='?';document.getElementById('tba-q').className='tba-disp empty active-inp';
+    document.getElementById('tba-r').textContent='?';document.getElementById('tba-r').className='tba-disp empty';
+    const a=document.getElementById('two-blank-area');a.style.display='flex';a.style.flexDirection='column';
+    document.querySelectorAll('#two-np .npbtn').forEach(b=>b.style.pointerEvents='');
+  } else if(q.mc||q.opts){
+    const mc=document.getElementById('mc-area');mc.style.display='flex';mc.style.flexDirection='column';
+    mc.innerHTML='';
+    const opts=q.opts||q.mc;
+    opts.forEach(opt=>{
+      const b=document.createElement('button');b.className='mcbtn';
+      b.textContent=opt;b.onclick=()=>doMC(opt,b);mc.appendChild(b);
+    });
+  } else {
+    pracVal.v='';
+    const a=document.getElementById('std-area');a.style.display='flex';a.style.flexDirection='column';
+    document.querySelectorAll('#np-grid .npbtn').forEach(b=>b.style.pointerEvents='');
+  }
+}
+
+function renderQ(q){
+  const el=document.getElementById('qtext');
+  const hint=document.getElementById('qhint');
+  const isRev=!!q._revisionLevel;
+  hint.textContent=(isRev?'🔀 Quick check! ':'')+( q.hint||LEVELS[ses.level].rounds[ses.round].name);
+
+  if(q.isWord||q.isDiv){
+    el.style.cssText='font-family:\'Nunito\',sans-serif;font-weight:800;line-height:1.45;color:var(--txt);';
+    el.style.fontSize=q.q.length>70?'.78rem':q.q.length>50?'.88rem':q.q.length>35?'1rem':'1.15rem';
+    el.textContent=q.q;
+    return;
+  }
+  // Render with inline blank
+  el.style.cssText='font-family:\'Baloo 2\',sans-serif;font-weight:900;line-height:1.2;color:var(--txt);font-size:1.8rem;';
+  const qStr=q.q.replace('= ?','=');
+  el.innerHTML='';
+  if(q.q.includes('___')){
+    const parts=q.q.split('___');
+    const before=document.createElement('span');before.textContent=parts[0];
+    const blank=document.createElement('span');blank.className='q-blank';blank.id='q-blank';blank.textContent=' ';
+    const after=document.createElement('span');after.textContent=parts[1]||'';
+    el.appendChild(before);el.appendChild(blank);el.appendChild(after);
+  } else {
+    const qtxt=document.createElement('span');qtxt.textContent=qStr;
+    const blank=document.createElement('span');blank.className='q-blank';blank.id='q-blank';blank.textContent=' ';
+    el.appendChild(qtxt);el.appendChild(blank);
+  }
+}
+
+// ═══════════════════════════════════════════════════
+// ANSWER HANDLERS
+// ═══════════════════════════════════════════════════
+function doSubmit(){
+  const v=parseInt(pracVal.v);if(isNaN(v))return;
+  ses.attemptsOnQ++;ses.tried++;
+  const ok=v===ses.cq.a;
+  flashBlank('q-blank',ok,v);
+  document.querySelectorAll('#np-grid .npbtn').forEach(b=>b.style.pointerEvents='none');
+  handleResult(ok);
+}
+
+function submitTwoBlank(){
+  const q=parseInt(twoQVal.v),r=parseInt(twoRVal.v);
+  if(isNaN(q)||isNaN(r)){setFb('Fill in both boxes! Tap each box then type.','no');return;}
+  ses.attemptsOnQ++;ses.tried++;
+  const okQ=q===ses.cq.a,okR=r===ses.cq.r,ok=okQ&&okR;
+  document.getElementById('tba-q').className='tba-disp '+(okQ?'ok':'no');
+  document.getElementById('tba-r').className='tba-disp '+(okR?'ok':'no');
+  document.querySelectorAll('#two-np .npbtn').forEach(b=>b.style.pointerEvents='none');
+  handleResult(ok);
+}
+
+function doMC(chosen,btn){
+  document.querySelectorAll('.mcbtn').forEach(b=>b.onclick=null);
+  ses.attemptsOnQ++;ses.tried++;
+  const ok=String(chosen)===String(ses.cq.a)||parseInt(chosen)===ses.cq.a;
+  if(ok)btn.classList.add('right');
+  else{
+    btn.classList.add('wrong');
+    document.querySelectorAll('.mcbtn').forEach(b=>{
+      if(String(b.textContent)===String(ses.cq.a)||parseInt(b.textContent)===ses.cq.a)b.classList.add('right');
+    });
+  }
+  handleResult(ok);
+}
+
+function flashBlank(id,ok,v){
+  const blank=document.getElementById(id);
+  if(!blank)return;
+  blank.classList.add(ok?'ok':'no');
+  if(!ok)blank.textContent=v;
+}
+
+function handleResult(ok){
+  const isRev=!!ses.cq._revisionLevel;
+
+  if(ok){
+    ses.correct++;
+    setFb(pickOk(),'ok');
+    document.getElementById('qcard').classList.add('pop');
+    setTimeout(()=>document.getElementById('qcard').classList.remove('pop'),220);
+    if(ses.correct%5===0)burst();
+    updScores();
+    const delay=700;
+    setTimeout(()=>{
+      pracVal.v='';twoQVal.v='';twoRVal.v='';
+      document.querySelectorAll('#np-grid .npbtn, #two-np .npbtn').forEach(b=>b.style.pointerEvents='');
+      checkRoundEnd();
+    },delay);
+  } else {
+    // Track revision failures
+    if(isRev){
+      const lvIdx=ses.cq._revisionLevel;
+      if(!ses.weakRevision[lvIdx])ses.weakRevision[lvIdx]=0;
+      ses.weakRevision[lvIdx]++;
+      if(ses.weakRevision[lvIdx]>=2){
+        // Flag for attention
+        if(!S.attention)S.attention={};
+        if(!S.attention[lvIdx])S.attention[lvIdx]=[];
+        S.attention[lvIdx].push(new Date().toLocaleDateString());
+        saveS();
+      }
+    }
+    if(ses.attemptsOnQ>=2){
+      setFb('Answer: '+ses.cq.a+(ses.cq.isDiv?' rem '+ses.cq.r:'')+' — next! →','no');
+      updScores();
+      setTimeout(()=>{
+        pracVal.v='';twoQVal.v='';twoRVal.v='';
+        document.querySelectorAll('#np-grid .npbtn, #two-np .npbtn').forEach(b=>b.style.pointerEvents='');
+        checkRoundEnd();
+      },1600);
+    } else {
+      setFb('Try again — check your paper! 📝','no');
+      setTimeout(()=>{
+        pracVal.v='';twoQVal.v='';twoRVal.v='';twoActive='q';
+        if(ses.cq.isDiv){
+          document.getElementById('tba-q').textContent='?';document.getElementById('tba-q').className='tba-disp empty active-inp';
+          document.getElementById('tba-r').textContent='?';document.getElementById('tba-r').className='tba-disp empty';
+        } else {
+          const blank=document.getElementById('q-blank');
+          if(blank){blank.className='q-blank';blank.textContent=' ';}
+        }
+        clrFb();
+        document.querySelectorAll('#np-grid .npbtn, #two-np .npbtn').forEach(b=>b.style.pointerEvents='');
+      },1200);
+    }
+  }
+}
+
+function checkRoundEnd(){
+  const needed=8;
+  if(ses.correct>=needed){
+    // Round passed
+    if(!ses.isFree){
+      const key=ses.level+'-'+ses.round;
+      if(!S.roundsPassed)S.roundsPassed={};
+      S.roundsPassed[key]=true;
+      saveS();
+    }
+    // Check if mini practice needed
+    const weakLvl=Object.keys(ses.weakRevision).map(Number).find(k=>ses.weakRevision[k]>=2);
+    if(weakLvl!==undefined&&!ses.isFree){
+      triggerMiniPractice(weakLvl);
+    } else {
+      nextRound();
+    }
+  } else {
+    // Keep going — get another question
+    nextQ();
+  }
+}
+
+// ═══════════════════════════════════════════════════
+// SCORES / FEEDBACK
+// ═══════════════════════════════════════════════════
+function updScores(){
+  document.getElementById('sc-c').textContent=ses.correct;
+  document.getElementById('sc-t').textContent=ses.tried;
+  document.getElementById('sc-p').textContent=ses.tried>0?Math.round(ses.correct/ses.tried*100)+'%':'0%';
+  const pct=ses.tried>0?ses.correct/ses.tried:0;
+  document.getElementById('pbar-fill').style.width=Math.min(ses.correct/8*100,100)+'%';
+  document.getElementById('pbar-num').textContent=ses.correct+' / 8';
+  document.getElementById('pbar-left').textContent='Correct answers';
+}
+function setFb(msg,cls){const fb=document.getElementById('fbtext');fb.textContent=msg;fb.className='show '+cls;}
+function clrFb(){const fb=document.getElementById('fbtext');fb.textContent='';fb.className='';}
+function pickOk(){return['Great! ✓','Correct! ⭐','Yes! 🌟','Brilliant! 🎉','Perfect! ✨','Well done! 🏆'][~~(Math.random()*6)];}
+
+function hideAllA(){
+  document.getElementById('std-area').style.display='none';
+  document.getElementById('two-blank-area').style.display='none';
+  document.getElementById('mc-area').style.display='none';
+}
+function showPshell(){
+  document.getElementById('pshell').style.display='flex';
+  document.getElementById('between-shell').style.display='none';
+  document.getElementById('res-shell').style.display='none';
+  document.getElementById('mini-shell').style.display='none';
+}
+
+// ═══════════════════════════════════════════════════
+// LEVEL RESULTS
+// ═══════════════════════════════════════════════════
+function showLevelResults(){
+  const idx=ses.level;
+  const rcount=LEVELS[idx].rounds.length;
+  const rpassed=Object.keys(S.roundsPassed||{}).filter(k=>k.startsWith(idx+'-')).length;
+  const allPassed=rpassed>=rcount;
+  const stars=allPassed?3:rpassed>=Math.ceil(rcount/2)?2:rpassed>0?1:0;
+
+  if(!ses.isFree){
+    if(!S.best)S.best={};
+    S.best[idx]=Math.max(rpassed,S.best[idx]||0);
+    if(allPassed){if(!S.passed)S.passed={};S.passed[idx]=true;}
+    S.stars+=stars;saveS();updHdr();
+  }
+
+  document.getElementById('pshell').style.display='none';
+  document.getElementById('between-shell').style.display='none';
+  document.getElementById('mini-shell').style.display='none';
+  document.getElementById('res-shell').style.display='flex';
+  document.getElementById('res-shell').style.flexDirection='column';
+
+  document.getElementById('res-ico').textContent=allPassed?'🏆':rpassed>0?'⭐':'💪';
+  document.getElementById('res-title').textContent=allPassed?'Level Complete!':rpassed>0?'Good progress!':'Keep going!';
+  document.getElementById('res-sub').textContent=
+    'Rounds completed: '+rpassed+' / '+rcount+'\n'+(allPassed?'Next level unlocked! 🎉':'Complete all rounds to unlock the next level.');
+  document.getElementById('res-stars').textContent='⭐'.repeat(stars)||'—';
+  if(allPassed)burst();
+}
+
+function retryLevel(){ses.round=0;ses.isFree=false;startLevel(ses.level);}
+
+// ═══════════════════════════════════════════════════
+// UNLOCK / LOCK
+// ═══════════════════════════════════════════════════
+function doUnlock(){
+  const v=parseInt(document.getElementById('uinp').value);
+  const msg=document.getElementById('umsg');
+  if(!v||v<1||v>15){msg.textContent='Enter 1 to 15.';msg.style.color='var(--red)';return;}
+  if(!S.unlocked)S.unlocked={};
+  S.unlocked[v-1]=true;saveS();buildLevelList();
+  msg.textContent='✓ Level '+v+' unlocked!';msg.style.color='var(--p)';
+  document.getElementById('uinp').value='';setTimeout(()=>msg.textContent='',3000);
+}
+function doLock(){
+  const v=parseInt(document.getElementById('uinp').value);
+  const msg=document.getElementById('umsg');
+  if(!v||v<1||v>15){msg.textContent='Enter 1 to 15.';msg.style.color='var(--red)';return;}
+  if(v===1){msg.textContent='Level 1 cannot be locked.';msg.style.color='var(--red)';return;}
+  if(!S.unlocked)S.unlocked={};
+  S.unlocked[v-1]=false;
+  if(!S.passed)S.passed={};S.passed[v-1]=false;
+  saveS();buildLevelList();
+  msg.textContent='🔒 Level '+v+' locked.';msg.style.color='var(--muted)';
+  document.getElementById('uinp').value='';setTimeout(()=>msg.textContent='',3000);
+}
+function resetAll(){
+  S={unlocked:{0:true},passed:{},roundsPassed:{},stars:0,best:{},attention:{},weakCounts:{}};
+  saveS();buildLevelList();updHdr();
+}
+
+// ═══════════════════════════════════════════════════
+// CONFETTI
+// ═══════════════════════════════════════════════════
+function burst(){
+  const w=document.getElementById('cc');
+  const c=['#1877F2','#4e9af1','#0f4fa8','#e7f0fd','#15803d','#fbbf24'];
+  for(let i=0;i<30;i++){
+    const p=document.createElement('div');p.className='cp';
+    p.style.cssText='left:'+Math.random()*100+'vw;background:'+c[~~(Math.random()*6)]+';animation-delay:'+Math.random()*.5+'s;animation-duration:'+(1.4+Math.random()*.7)+'s;transform:rotate('+Math.random()*360+'deg)';
+    w.appendChild(p);setTimeout(()=>p.remove(),2500);
+  }
+}
+
+// ═══════════════════════════════════════════════════
+// NUMPADS
+// ═══════════════════════════════════════════════════
+function buildNP(gridId,submitFn,valRef,updateFn){
+  const grid=document.getElementById(gridId);if(!grid)return;
+  const keys=['1','2','3','4','5','6','7','8','9','⌫','0','GO'];
+  keys.forEach(k=>{
+    const btn=document.createElement('button');
+    btn.className='npbtn'+(k==='⌫'?' np-del':k==='GO'?' np-go':'');
+    btn.textContent=k;
+    btn.addEventListener('click',()=>{
+      if(k==='GO'){submitFn();return;}
+      if(k==='⌫'){valRef.v=valRef.v.slice(0,-1);}
+      else{if(valRef.v.length>=5)return;valRef.v+=k;}
+      if(updateFn)updateFn(valRef.v);
+    });
+    grid.appendChild(btn);
+  });
+}
+
+// Main numpad — updates inline blank
+buildNP('np-grid',doSubmit,pracVal,(v)=>{
+  const blank=document.getElementById('q-blank');
+  if(blank)blank.textContent=v||' ';
+});
+
+// Two-blank numpad — switches between quotient and remainder
+buildNP('two-np',submitTwoBlank,twoQVal,(v)=>{
+  if(twoActive==='q'){twoQVal.v=v;document.getElementById('tba-q').textContent=v||'?';}
+  else{twoRVal.v=v;document.getElementById('tba-r').textContent=v||'?';}
+});
+
+// Tap to switch focus
+document.getElementById('tba-q').addEventListener('click',()=>{
+  twoActive='q';
+  document.getElementById('tba-q').classList.add('active-inp');
+  document.getElementById('tba-r').classList.remove('active-inp');
+});
+document.getElementById('tba-r').addEventListener('click',()=>{
+  twoActive='r';
+  document.getElementById('tba-r').classList.add('active-inp');
+  document.getElementById('tba-q').classList.remove('active-inp');
+  // Wire two-np to remainder val
+  const grid=document.getElementById('two-np');
+  grid.querySelectorAll('.npbtn:not(.np-go):not(.np-del)').forEach(btn=>{
+    // handled via twoActive flag in update fn above
+  });
+});
+
+init();
+</script>
+</body>
+</html>
