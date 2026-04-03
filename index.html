@@ -3,6 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#1877F2">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Maths Magic">
 <title>Amoha's Maths Magic</title>
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800;900&family=Baloo+2:wght@800;900&display=swap" rel="stylesheet">
 <style>
@@ -57,7 +61,7 @@ html,body{height:100%;font-family:'Nunito',sans-serif;background:var(--pw);color
 
 /* PRACTICE SHELL */
 #pg-prac{overflow:hidden;}
-#pshell{position:absolute;inset:0;display:flex;flex-direction:column;}
+#pshell{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:space-between;overflow:hidden;}
 #ptop{flex:0 0 auto;padding:5px 14px 0;display:flex;flex-direction:column;gap:4px;background:var(--pw);}
 .back-row{display:flex;align-items:center;gap:8px;}
 .backbtn{background:none;border:none;font-family:'Nunito',sans-serif;font-weight:800;font-size:.82rem;color:var(--muted);cursor:pointer;}
@@ -73,7 +77,7 @@ html,body{height:100%;font-family:'Nunito',sans-serif;background:var(--pw);color
 #pbar-fill{height:100%;background:var(--p);border-radius:99px;width:0%;transition:width .3s;}
 
 /* QUESTION ZONE */
-#qzone{flex:0 0 18vmax;max-height:155px;min-height:85px;padding:5px 14px 0;display:flex;align-items:center;justify-content:center;}
+#qzone{flex:0 0 auto;height:130px;max-height:130px;padding:5px 14px 0;display:flex;align-items:center;justify-content:center;}
 #qcard{width:100%;height:100%;background:var(--w);border:2px solid var(--bdr);border-radius:var(--r);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:10px 14px;text-align:center;}
 #qtext{font-family:'Baloo 2',sans-serif;font-size:1.8rem;font-weight:900;line-height:1.2;color:var(--txt);}
 #qhint{font-size:.66rem;color:var(--muted);margin-top:3px;}
@@ -86,10 +90,10 @@ html,body{height:100%;font-family:'Nunito',sans-serif;background:var(--pw);color
 #fbtext.no{color:var(--red);}
 
 /* ANSWER ZONE */
-#azone{flex:1;min-height:0;max-height:55vh;padding:4px 14px 8px;display:flex;flex-direction:column;justify-content:flex-end;gap:4px;overflow:hidden;}
-#std-area{display:flex;flex-direction:column;gap:4px;flex:1;min-height:0;max-height:100%;}
-.numpad-grid{display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(4,1fr);gap:4px;flex:1;min-height:0;max-height:100%;}
-.npbtn{height:100%;min-height:34px;max-height:48px;border-radius:10px;border:2px solid var(--bdr);background:var(--w);font-family:'Baloo 2',sans-serif;font-size:1.1rem;font-weight:900;color:var(--txt);cursor:pointer;transition:background .1s,transform .08s;-webkit-tap-highlight-color:transparent;user-select:none;display:flex;align-items:center;justify-content:center;}
+#azone{flex:0 0 auto;padding:4px 14px 8px;display:flex;flex-direction:column;justify-content:flex-end;gap:4px;overflow:hidden;}
+#std-area{display:flex;flex-direction:column;gap:4px;}
+.numpad-grid{display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(4,42px);gap:4px;}
+.npbtn{height:42px;border-radius:10px;border:2px solid var(--bdr);background:var(--w);font-family:'Baloo 2',sans-serif;font-size:1.1rem;font-weight:900;color:var(--txt);cursor:pointer;transition:background .1s,transform .08s;-webkit-tap-highlight-color:transparent;user-select:none;display:flex;align-items:center;justify-content:center;}
 .npbtn:active{background:var(--pl);transform:scale(.94);}
 .npbtn.np-del{background:var(--pl);color:var(--p);}
 .npbtn.np-go{background:var(--p);color:var(--w);box-shadow:0 4px 0 var(--pb);}
@@ -111,7 +115,7 @@ html,body{height:100%;font-family:'Nunito',sans-serif;background:var(--pw);color
 .tba-disp.empty{color:#ccc;}
 #two-go{width:100%;height:48px;border-radius:12px;border:none;background:var(--p);color:var(--w);font-family:'Baloo 2',sans-serif;font-size:1.2rem;font-weight:900;cursor:pointer;box-shadow:0 4px 0 var(--pb);transition:transform .08s,box-shadow .08s;flex-shrink:0;}
 #two-go:active{transform:translateY(3px);box-shadow:0 1px 0 var(--pb);}
-#two-np{display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(4,1fr);gap:4px;flex:1;min-height:0;max-height:100%;}
+#two-np{display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(4,42px);gap:4px;}
 
 /* MC */
 #mc-area{display:none;flex-direction:column;gap:5px;flex-shrink:0;}
