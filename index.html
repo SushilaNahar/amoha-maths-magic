@@ -13,7 +13,14 @@
   --green:#15803d;--red:#dc2626;--r:16px;
 }
 html,body{height:100%;font-family:'Nunito',sans-serif;background:var(--pw);color:var(--txt);overflow:hidden;}
-#app{position:fixed;inset:0;display:flex;flex-direction:column;max-width:480px;margin:0 auto;background:var(--pw);}
+#app{
+  position:fixed;inset:0;
+  display:flex;flex-direction:column;
+  max-width:480px;margin:0 auto;
+  background:var(--pw);
+  height:100dvh;  /* use dynamic viewport height on iPhone */
+  max-height:100dvh;
+}
 #topbar{flex:0 0 52px;background:var(--p);display:flex;align-items:center;justify-content:space-between;padding:0 16px;}
 #topbar-title{font-family:'Baloo 2',sans-serif;font-size:1.05rem;font-weight:900;color:var(--w);}
 #topbar-stars{background:rgba(255,255,255,.2);border:2px solid rgba(255,255,255,.35);border-radius:99px;padding:4px 13px;font-weight:900;color:var(--w);font-size:.85rem;}
@@ -66,7 +73,7 @@ html,body{height:100%;font-family:'Nunito',sans-serif;background:var(--pw);color
 #pbar-fill{height:100%;background:var(--p);border-radius:99px;width:0%;transition:width .3s;}
 
 /* QUESTION ZONE */
-#qzone{flex:0 0 22vmax;max-height:175px;min-height:95px;padding:5px 14px 0;display:flex;align-items:center;justify-content:center;}
+#qzone{flex:0 0 18vmax;max-height:155px;min-height:85px;padding:5px 14px 0;display:flex;align-items:center;justify-content:center;}
 #qcard{width:100%;height:100%;background:var(--w);border:2px solid var(--bdr);border-radius:var(--r);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:10px 14px;text-align:center;}
 #qtext{font-family:'Baloo 2',sans-serif;font-size:1.8rem;font-weight:900;line-height:1.2;color:var(--txt);}
 #qhint{font-size:.66rem;color:var(--muted);margin-top:3px;}
@@ -79,10 +86,10 @@ html,body{height:100%;font-family:'Nunito',sans-serif;background:var(--pw);color
 #fbtext.no{color:var(--red);}
 
 /* ANSWER ZONE */
-#azone{flex:1;min-height:0;padding:4px 14px 8px;display:flex;flex-direction:column;justify-content:flex-end;gap:4px;overflow:hidden;}
-#std-area{display:flex;flex-direction:column;gap:4px;flex:1;min-height:0;}
-.numpad-grid{display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(4,1fr);gap:4px;flex:1;}
-.npbtn{height:100%;min-height:36px;max-height:52px;border-radius:10px;border:2px solid var(--bdr);background:var(--w);font-family:'Baloo 2',sans-serif;font-size:1.15rem;font-weight:900;color:var(--txt);cursor:pointer;transition:background .1s,transform .08s;-webkit-tap-highlight-color:transparent;user-select:none;display:flex;align-items:center;justify-content:center;}
+#azone{flex:1;min-height:0;max-height:55vh;padding:4px 14px 8px;display:flex;flex-direction:column;justify-content:flex-end;gap:4px;overflow:hidden;}
+#std-area{display:flex;flex-direction:column;gap:4px;flex:1;min-height:0;max-height:100%;}
+.numpad-grid{display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(4,1fr);gap:4px;flex:1;min-height:0;max-height:100%;}
+.npbtn{height:100%;min-height:34px;max-height:48px;border-radius:10px;border:2px solid var(--bdr);background:var(--w);font-family:'Baloo 2',sans-serif;font-size:1.1rem;font-weight:900;color:var(--txt);cursor:pointer;transition:background .1s,transform .08s;-webkit-tap-highlight-color:transparent;user-select:none;display:flex;align-items:center;justify-content:center;}
 .npbtn:active{background:var(--pl);transform:scale(.94);}
 .npbtn.np-del{background:var(--pl);color:var(--p);}
 .npbtn.np-go{background:var(--p);color:var(--w);box-shadow:0 4px 0 var(--pb);}
@@ -104,7 +111,7 @@ html,body{height:100%;font-family:'Nunito',sans-serif;background:var(--pw);color
 .tba-disp.empty{color:#ccc;}
 #two-go{width:100%;height:48px;border-radius:12px;border:none;background:var(--p);color:var(--w);font-family:'Baloo 2',sans-serif;font-size:1.2rem;font-weight:900;cursor:pointer;box-shadow:0 4px 0 var(--pb);transition:transform .08s,box-shadow .08s;flex-shrink:0;}
 #two-go:active{transform:translateY(3px);box-shadow:0 1px 0 var(--pb);}
-#two-np{display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(4,1fr);gap:4px;flex:1;min-height:0;}
+#two-np{display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(4,1fr);gap:4px;flex:1;min-height:0;max-height:100%;}
 
 /* MC */
 #mc-area{display:none;flex-direction:column;gap:5px;flex-shrink:0;}
@@ -188,7 +195,7 @@ html,body{height:100%;font-family:'Nunito',sans-serif;background:var(--pw);color
       <div class="unlock-box">
         <h3>🔐 Parent — Unlock or Lock a Level</h3>
         <div class="urow">
-          <input class="uinput" id="uinp" type="number" placeholder="Level (1–15)" min="1" max="15" inputmode="numeric">
+          <input class="uinput" id="uinp" type="number" placeholder="Level (1–18)" min="1" max="18" inputmode="numeric">
           <button class="ubtn" onclick="doUnlock()">Unlock</button>
           <button class="ubtn ubtn-lock" onclick="doLock()">Lock</button>
         </div>
@@ -633,9 +640,129 @@ function genGrand(){
   return{q:''+p+' boxes × '+w+' g each. Add '+extra+' g. Total?',a:p*w+extra,hint:'Multiply then add',isWord:true};
 }
 
-// ═══════════════════════════════════════════════════
-// LEVELS — each has rounds, each round has a generator
-// ═══════════════════════════════════════════════════
+// --- FRACTIONS ---
+function genFrac_half(){
+  const nums=[2,4,6,8,10,12,14,16,18,20,22,24,30,40,50,100];
+  const n=nums[rnd(0,nums.length-1)];
+  if(rnd(0,1))return{q:'Half of '+n+' = ?',a:n/2,hint:'Divide by 2'};
+  return{q:n+' ÷ 2 = ?',a:n/2,hint:'Halving is the same as dividing by 2'};
+}
+function genFrac_quarter(){
+  const nums=[4,8,12,16,20,24,28,32,36,40,44,48,60,80,100];
+  const n=nums[rnd(0,nums.length-1)];
+  if(rnd(0,1))return{q:'Quarter of '+n+' = ?',a:n/4,hint:'Divide by 4'};
+  return{q:'¼ of '+n+' = ?',a:n/4,hint:'A quarter means divide by 4'};
+}
+function genFrac_third(){
+  const nums=[3,6,9,12,15,18,21,24,27,30];
+  const n=nums[rnd(0,nums.length-1)];
+  return{q:'One third of '+n+' = ?',a:n/3,hint:'Divide by 3'};
+}
+function genFrac_ofquantity(){
+  const type=rnd(0,4);
+  if(type===0){const n=[200,400,600,800,1000][rnd(0,4)];return{q:'Half of '+n+' g = ___ g',a:n/2,hint:'Divide by 2',isWord:true};}
+  if(type===1){const n=[4,8,12,16,20][rnd(0,4)];return{q:'Quarter of '+n+' kg = ___ kg',a:n/4,hint:'Divide by 4',isWord:true};}
+  if(type===2){const n=[2,4,6,8,10][rnd(0,4)];return{q:'Half of '+n+' metres = ___ metres',a:n/2,hint:'Divide by 2',isWord:true};}
+  if(type===3){const n=[100,200,300,400,500][rnd(0,4)];return{q:'Half of '+n+' cm = ___ cm',a:n/2,hint:'Divide by 2',isWord:true};}
+  const n=[40,80,120,160,200][rnd(0,4)];return{q:'Quarter of '+n+' ml = ___ ml',a:n/4,hint:'Divide by 4',isWord:true};
+}
+function genFrac_word(){
+  const type=rnd(0,4);
+  if(type===0){const t=rnd(2,5)*4;return{q:'There are '+t+' children. A quarter of them have pets. How many have pets?',a:t/4,hint:'Find a quarter',isWord:true};}
+  if(type===1){const t=rnd(2,6)*2;return{q:'A ribbon is '+t+' metres long. Half is cut off. How long is left?',a:t/2,hint:'Find half',isWord:true};}
+  if(type===2){const t=rnd(2,5)*4*100;return{q:'Mama has ₹'+t+'. She spends a quarter. How much is left?',a:t-t/4,hint:'Find a quarter then subtract',isWord:true};}
+  if(type===3){const t=rnd(2,8)*2;return{q:'A bottle has '+t+' litres. Half is used. How much is left?',a:t/2,hint:'Find half',isWord:true};}
+  const t=rnd(2,5)*4;return{q:''+t+' sweets shared equally into 4 bags. How many in each bag?',a:t/4,hint:'A quarter each',isWord:true};
+}
+
+// --- MEASUREMENT ---
+function genMeas_time_hours(){
+  const type=rnd(0,4);
+  if(type===0)return{q:'How many hours in 2 days?',a:48,hint:'1 day = 24 hours'};
+  if(type===1)return{q:'How many hours in half a day?',a:12,hint:'Half of 24'};
+  if(type===2){const h=rnd(2,6);return{q:'How many minutes in '+h+' hours?',a:h*60,hint:'1 hour = 60 minutes'};}
+  if(type===3){const m=rnd(2,5)*60;return{q:''+m+' minutes = ___ hours',a:m/60,hint:'Divide by 60'};}
+  return{q:'How many seconds in 2 minutes?',a:120,hint:'1 minute = 60 seconds'};
+}
+function genMeas_time_duration(){
+  const starts=[[9,0],[9,30],[10,0],[10,15],[10,30],[10,45],[11,0]];
+  const durs=[10,15,20,25,30,45];
+  const s=starts[rnd(0,starts.length-1)];
+  const d=durs[rnd(0,durs.length-1)];
+  const sh=s[0],sm=s[1];
+  let em=sm+d,eh=sh;
+  if(em>=60){em-=60;eh++;}
+  const fmt=t=>{const h=t[0],m=t[1];return(h>12?h-12:h)+':'+(m===0?'00':m)+(h>=12?' pm':' am');};
+  return{q:'Start: '+fmt([sh,sm])+'. Duration: '+d+' minutes. End time?',
+    a:eh*100+em,
+    hint:'Count on '+d+' minutes',
+    isWord:true,
+    displayA:(eh>12?eh-12:eh)+':'+(em===0?'00':em)+(eh>=12?' pm':' am')};
+}
+function genMeas_time_elapsed(){
+  const pairs=[[[9,0],[9,20],20],[[10,10],[10,30],20],[[9,30],[10,0],30],[[10,0],[10,45],45],[[9,15],[9,45],30],[[10,30],[11,0],30],[[11,0],[11,30],30]];
+  const p=pairs[rnd(0,pairs.length-1)];
+  const fmt=t=>{const h=t[0],m=t[1];return(h>12?h-12:h)+':'+(m===0?'00':m)+(h>=12?' pm':' am');};
+  return{q:'Start: '+fmt(p[0])+'. End: '+fmt(p[1])+'. How long in minutes?',a:p[2],hint:'Count the minutes between',isWord:true};
+}
+function genMeas_litres(){
+  const type=rnd(0,4);
+  if(type===0){const l=rnd(1,5);return{q:l+' litres = ___ ml',a:l*1000,hint:'1 litre = 1000 ml'};}
+  if(type===1){const ml=rnd(1,5)*1000;return{q:ml+' ml = ___ litres',a:ml/1000,hint:'Divide by 1000'};}
+  if(type===2)return{q:'How many ml in half a litre?',a:500,hint:'Half of 1000 ml'};
+  if(type===3)return{q:'How many ml in one and a half litres?',a:1500,hint:'1000 + 500'};
+  const l=rnd(1,3),ml=rnd(1,9)*100;return{q:l+' litres '+ml+' ml = ___ ml',a:l*1000+ml,hint:'Convert then add'};
+}
+function genMeas_length(){
+  const type=rnd(0,4);
+  if(type===0){const m=rnd(1,5);return{q:m+' metres = ___ cm',a:m*100,hint:'1 metre = 100 cm'};}
+  if(type===1){const cm=rnd(1,5)*100;return{q:cm+' cm = ___ metres',a:cm/100,hint:'Divide by 100'};}
+  if(type===2){const m=rnd(1,3),cm=rnd(1,9)*10;return{q:m+' m '+cm+' cm = ___ cm',a:m*100+cm,hint:'Convert then add'};}
+  if(type===3){const km=rnd(1,5);return{q:km+' km = ___ m',a:km*1000,hint:'1 km = 1000 m'};}
+  return{q:'How many cm in half a metre?',a:50,hint:'Half of 100 cm'};
+}
+
+// --- DOUBLES, HALVES, INVERSES ---
+function genDH_double(){
+  const type=rnd(0,3);
+  if(type===0){const n=rnd(5,25);return{q:'Double '+n+' = ?',a:n*2,hint:'Add it to itself'};}
+  if(type===1){const n=rnd(10,50);return{q:'Double '+n+' metres = ___ metres',a:n*2,hint:'Multiply by 2',isWord:true};}
+  if(type===2){const n=rnd(5,25);return{q:n+' + '+n+' = ?',a:n*2,hint:'Same number twice — that is doubling'};}
+  const n=rnd(5,20);return{q:'2 × '+n+' = ?',a:n*2,hint:'Multiplying by 2 is the same as doubling'};
+}
+function genDH_halve(){
+  const evens=[10,12,14,16,18,20,22,24,26,28,30,32,34,36,38,40,42,44,46,48,50];
+  const n=evens[rnd(0,evens.length-1)];
+  const type=rnd(0,2);
+  if(type===0)return{q:'Halve '+n+' = ?',a:n/2,hint:'Divide by 2'};
+  if(type===1)return{q:'Half of '+n+' = ?',a:n/2,hint:'Halving means dividing by 2'};
+  return{q:n+' ÷ 2 = ?',a:n/2,hint:'Divide by 2'};
+}
+function genDH_inverse(){
+  const a=rnd(3,9),b=rnd(3,9),c=a+b;
+  const type=rnd(0,3);
+  if(type===0)return{q:'If '+a+' + '+b+' = '+c+', then '+c+' − '+b+' = ?',a:a,hint:'Addition and subtraction are inverses'};
+  if(type===1)return{q:'If '+c+' − '+a+' = '+b+', then '+b+' + '+a+' = ?',a:c,hint:'The inverse of subtracting is adding'};
+  const d=rnd(2,9),q=rnd(2,9);
+  if(type===2)return{q:'If '+d+' × '+q+' = '+(d*q)+', then '+(d*q)+' ÷ '+d+' = ?',a:q,hint:'Multiplication and division are inverses'};
+  return{q:'If '+(d*q)+' ÷ '+q+' = '+d+', then '+d+' × '+q+' = ?',a:d*q,hint:'The inverse of dividing is multiplying'};
+}
+function genDH_nearDouble(){
+  const n=rnd(4,20);
+  const type=rnd(0,2);
+  if(type===0)return{q:n+' + '+(n+1)+' = ?',a:n*2+1,hint:'Double '+n+' then add 1'};
+  if(type===1)return{q:(n+1)+' + '+n+' = ?',a:n*2+1,hint:'Double '+n+' then add 1'};
+  return{q:n+' + '+(n+2)+' = ?',a:n*2+2,hint:'Double '+n+' then add 2'};
+}
+function genDH_word(){
+  const type=rnd(0,3);
+  if(type===0){const n=rnd(5,20);return{q:'A plank is '+n+' metres. Double its length. How long now?',a:n*2,hint:'Multiply by 2',isWord:true};}
+  if(type===1){const n=rnd(10,30)*2;return{q:'A rope is '+n+' metres. It is cut in half. How long is each piece?',a:n/2,hint:'Divide by 2',isWord:true};}
+  if(type===2){const a=rnd(10,25),b=rnd(5,15),c=a+b;return{q:'If '+a+' + '+b+' = '+c+', what is '+c+' − '+a+'?',a:b,hint:'Use the inverse',isWord:true};}
+  const n=rnd(3,8);return{q:'Riya thinks of a number, doubles it and gets '+n*2+'. What was her number?',a:n,hint:'Halve to find it',isWord:true};
+}
+
+
 const LEVELS = [
   {name:'Place Value — 2 Digits',
    rounds:[
@@ -747,6 +874,29 @@ const LEVELS = [
      {name:'Challenge Round 3',preview:'You can do this!',gen:genGrand},
      {name:'Final Challenge',preview:'Give it your best!',gen:genGrand},
    ]},
+  {name:'Fractions — Half and Quarter',
+   rounds:[
+     {name:'Finding Halves',preview:'Half of 14 = ?',gen:genFrac_half},
+     {name:'Finding Quarters',preview:'Quarter of 20 = ?',gen:genFrac_quarter},
+     {name:'Finding Thirds',preview:'One third of 12 = ?',gen:genFrac_third},
+     {name:'Fractions of Quantities',preview:'Half of 400 g = ___ g',gen:genFrac_ofquantity},
+     {name:'Fraction Word Problems',preview:'24 children. A quarter have pets. How many?',gen:genFrac_word},
+   ]},
+  {name:'Measurement — Time and Length',
+   rounds:[
+     {name:'Hours and Minutes',preview:'How many hours in 2 days?',gen:genMeas_time_hours},
+     {name:'How Long Did It Take?',preview:'Start 9:00. End 9:20. How many minutes?',gen:genMeas_time_elapsed},
+     {name:'Litres and Millilitres',preview:'2 litres = ___ ml',gen:genMeas_litres},
+     {name:'Metres and Centimetres',preview:'3 metres = ___ cm',gen:genMeas_length},
+   ]},
+  {name:'Doubles, Halves and Inverses',
+   rounds:[
+     {name:'Doubling Numbers',preview:'Double 15 = ?',gen:genDH_double},
+     {name:'Halving Numbers',preview:'Halve 34 = ?',gen:genDH_halve},
+     {name:'Near Doubles',preview:'13 + 14 = ?',gen:genDH_nearDouble},
+     {name:'Inverse Operations',preview:'If 6 + 8 = 14, then 14 − 8 = ?',gen:genDH_inverse},
+     {name:'Word Problems',preview:'A rope is 24 m. Cut in half. How long each?',gen:genDH_word},
+   ]},
 ];
 
 // ═══════════════════════════════════════════════════
@@ -755,7 +905,7 @@ const LEVELS = [
 let S=loadS();
 function loadS(){
   try{const d=JSON.parse(localStorage.getItem('amm1'));if(d)return d;}catch(e){}
-  return{unlocked:{0:true},passed:{},roundsPassed:{},stars:0,best:{},attention:{},weakCounts:{}};
+  return{unlocked:{0:true},passed:{},roundsPassed:{},stars:0,best:{},attention:{},weakCounts:{},currentLevel:null,currentRound:0};
 }
 function saveS(){localStorage.setItem('amm1',JSON.stringify(S));}
 
@@ -777,7 +927,15 @@ let pracVal={v:''}, twoQVal={v:''}, twoRVal={v:''}, twoActive='q';
 // ═══════════════════════════════════════════════════
 // INIT
 // ═══════════════════════════════════════════════════
-function init(){buildLevelList();updHdr();}
+function init(){
+  // Lock app height to prevent iPhone keyboard/layout issues
+  const app=document.getElementById('app');
+  function lockH(){app.style.height=window.innerHeight+'px';}
+  lockH();
+  let lastW=window.innerWidth;
+  window.addEventListener('resize',()=>{if(window.innerWidth!==lastW){lastW=window.innerWidth;lockH();}});
+  buildLevelList();updHdr();
+}
 function updHdr(){document.getElementById('hstars').textContent=S.stars;}
 
 function levelUnlocked(idx){
@@ -788,6 +946,21 @@ function levelUnlocked(idx){
 
 function buildLevelList(){
   const g=document.getElementById('level-list');g.innerHTML='';
+  // Resume button if mid-level
+  if(S.currentLevel!==null&&S.currentLevel!==undefined&&levelUnlocked(S.currentLevel)){
+    const lv=LEVELS[S.currentLevel];
+    const rd=lv.rounds[S.currentRound]||lv.rounds[0];
+    const resume=document.createElement('div');
+    resume.style.cssText='background:var(--p);border-radius:13px;padding:13px 14px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;color:var(--w);margin-bottom:4px;';
+    const left=document.createElement('div');
+    const h=document.createElement('div');h.style.cssText='font-family:\'Baloo 2\',sans-serif;font-weight:900;font-size:.9rem;margin-bottom:2px;';h.textContent='▶ Resume Level '+(S.currentLevel+1);
+    const p=document.createElement('div');p.style.cssText='font-size:.67rem;opacity:.85;font-weight:700;';p.textContent='Round '+(S.currentRound+1)+': '+rd.name;
+    left.appendChild(h);left.appendChild(p);
+    const ico=document.createElement('div');ico.style.fontSize='1.3rem';ico.textContent='→';
+    resume.appendChild(left);resume.appendChild(ico);
+    resume.onclick=()=>openLevelChoice(S.currentLevel);
+    g.appendChild(resume);
+  }
   LEVELS.forEach((lv,idx)=>{
     const u=levelUnlocked(idx);
     const passed=!!(S.passed&&S.passed[idx]);
@@ -802,7 +975,7 @@ function buildLevelList(){
     left.appendChild(h);left.appendChild(p);
     const ico=document.createElement('div');ico.className='lcard-icon';ico.textContent=icon;
     card.appendChild(left);card.appendChild(ico);
-    if(u)card.onclick=()=>startLevel(idx);
+    if(u) card.onclick=()=>openLevelChoice(idx);
     g.appendChild(card);
   });
 }
@@ -861,24 +1034,73 @@ function showProg(){
 // ═══════════════════════════════════════════════════
 // START LEVEL / ROUND
 // ═══════════════════════════════════════════════════
-function startLevel(idx){
-  ses.level=idx;ses.round=0;ses.isFree=false;
+function openLevelChoice(idx){
+  const lv=LEVELS[idx];
+  const rcount=lv.rounds.length;
+  const rpassed=Object.keys(S.roundsPassed||{}).filter(k=>k.startsWith(idx+'-')).length;
+
+  // If no rounds done yet — just start
+  if(rpassed===0){startLevel(idx,false);return;}
+
+  // If all rounds done — ask start fresh or free practice
+  if(rpassed>=rcount){
+    const choice=confirm(
+      'Level '+(idx+1)+' — '+lv.name+'\n\n'+
+      'You have completed all '+rcount+' rounds!\n\n'+
+      'OK = Start from the beginning again\n'+
+      'Cancel = Go to Free Practice mode'
+    );
+    if(choice){startLevel(idx,true);}
+    else{ses.level=idx;practiseFree();}
+    return;
+  }
+
+  // Partially done — offer choice
+  const nextRound=lv.rounds[rpassed];
+  const choice=confirm(
+    'Level '+(idx+1)+' — '+lv.name+'\n\n'+
+    'You have completed '+rpassed+' of '+rcount+' rounds.\n\n'+
+    'OK = Continue from Round '+(rpassed+1)+': '+nextRound.name+'\n'+
+    'Cancel = Start from the beginning (Round 1)'
+  );
+  startLevel(idx, !choice); // choice=true means continue, false means start over
+}
+
+function startLevel(idx, fromStart){
+  ses.level=idx;ses.isFree=false;
   ses.weakRevision={};ses.revisionQ5=0;ses.pendingMini=null;
+  const lv=LEVELS[idx];
+
+  if(fromStart){
+    // Start from Round 1
+    ses.round=0;
+  } else {
+    // Find first incomplete round
+    let startRound=0;
+    for(let i=0;i<lv.rounds.length;i++){
+      if(S.roundsPassed&&S.roundsPassed[idx+'-'+i]){startRound=i+1;}
+      else{startRound=i;break;}
+    }
+    if(startRound>=lv.rounds.length)startRound=lv.rounds.length-1;
+    ses.round=startRound;
+  }
+
+  S.currentLevel=idx;S.currentRound=ses.round;saveS();
   showPg('pg-prac');
   showPshell();
   beginRound();
 }
 
 function practiseFree(){
-  ses.isFree=true;
-  ses.round=0;
-  showPg('pg-prac');
-  showPshell();
-  beginRound();
+  ses.isFree=true;ses.round=0;
+  ses.weakRevision={};ses.revisionQ5=0;ses.pendingMini=null;
+  showPg('pg-prac');showPshell();beginRound();
 }
 
 function beginRound(){
   ses.correct=0;ses.tried=0;ses.attemptsOnQ=0;ses.revisionQ5=0;
+  // Save progress so app can resume here
+  S.currentLevel=ses.level;S.currentRound=ses.round;saveS();
   const lv=LEVELS[ses.level];
   const rd=lv.rounds[ses.round];
   document.getElementById('pheading').textContent='Level '+(ses.level+1)+' — '+lv.name;
@@ -1231,7 +1453,10 @@ function showLevelResults(){
     if(!S.best)S.best={};
     S.best[idx]=Math.max(rpassed,S.best[idx]||0);
     if(allPassed){if(!S.passed)S.passed={};S.passed[idx]=true;}
-    S.stars+=stars;saveS();updHdr();
+    S.stars+=stars;
+    // Clear resume position since level is done
+    S.currentLevel=null;S.currentRound=0;
+    saveS();updHdr();
   }
 
   document.getElementById('pshell').style.display='none';
@@ -1248,7 +1473,7 @@ function showLevelResults(){
   if(allPassed)burst();
 }
 
-function retryLevel(){ses.round=0;ses.isFree=false;startLevel(ses.level);}
+function retryLevel(){ses.isFree=false;startLevel(ses.level,true);}
 
 // ═══════════════════════════════════════════════════
 // UNLOCK / LOCK
@@ -1256,7 +1481,7 @@ function retryLevel(){ses.round=0;ses.isFree=false;startLevel(ses.level);}
 function doUnlock(){
   const v=parseInt(document.getElementById('uinp').value);
   const msg=document.getElementById('umsg');
-  if(!v||v<1||v>15){msg.textContent='Enter 1 to 15.';msg.style.color='var(--red)';return;}
+  if(!v||v<1||v>18){msg.textContent='Enter 1 to 18.';msg.style.color='var(--red)';return;}
   if(!S.unlocked)S.unlocked={};
   S.unlocked[v-1]=true;saveS();buildLevelList();
   msg.textContent='✓ Level '+v+' unlocked!';msg.style.color='var(--p)';
@@ -1265,7 +1490,7 @@ function doUnlock(){
 function doLock(){
   const v=parseInt(document.getElementById('uinp').value);
   const msg=document.getElementById('umsg');
-  if(!v||v<1||v>15){msg.textContent='Enter 1 to 15.';msg.style.color='var(--red)';return;}
+  if(!v||v<1||v>18){msg.textContent='Enter 1 to 18.';msg.style.color='var(--red)';return;}
   if(v===1){msg.textContent='Level 1 cannot be locked.';msg.style.color='var(--red)';return;}
   if(!S.unlocked)S.unlocked={};
   S.unlocked[v-1]=false;
